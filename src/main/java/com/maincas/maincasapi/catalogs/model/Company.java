@@ -24,7 +24,7 @@ import lombok.ToString;
 @Builder
 @ToString
 @EqualsAndHashCode(callSuper = false)
-@Audited
+@Audited(withModifiedFlag = true)
 @AuditOverride(forClass = Auditable.class)
 public class Company extends Auditable {
   @Id
