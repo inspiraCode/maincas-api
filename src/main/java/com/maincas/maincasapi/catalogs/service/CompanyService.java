@@ -16,4 +16,6 @@ public interface CompanyService {
   void deleteCompanyById(Long id);
 
   List<?> getRevisions(Long id, boolean fetchChanges);
+
+  List<Company> fetchByRole(String role);
 }

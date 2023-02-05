@@ -112,4 +112,8 @@ public class CompanyServiceImpl implements CompanyService {
     return auditQuery.getResultList();
   }
 
+  public List<Company> fetchByRole(String role){
+    return repo.findByRolesContainingIgnoreCase(role);
+  }
+
 }

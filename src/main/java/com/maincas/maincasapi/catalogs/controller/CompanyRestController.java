@@ -65,4 +65,9 @@ public class CompanyRestController {
     List results = service.getRevisions(Long.valueOf(companyId), fetchChanges);
     return ResponseEntity.ok(results);
   }
+
+  @GetMapping("/roles/{roleName}")
+  public List<Company> companiesByRole(@PathVariable(name = "roleName") String roleName) {
+    return service.fetchByRole(roleName);
+  }
 }
