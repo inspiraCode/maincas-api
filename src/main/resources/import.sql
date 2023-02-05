@@ -21,7 +21,7 @@ INSERT INTO company_aud (id, rev, revtype, created_by, created_by_mod, created_d
 -- Data for Name: tariff_schedule; Type: TABLE DATA; Schema: public; Owner: maincas
 --
 
-INSERT INTO tariff_schedule (id, created_by, created_date, last_modified_by, last_modified_date, base_description, code, document_description, observations, ust) VALUES (7, 'google-oauth2|118214196146974270990', '2023-02-05 12:54:16.532', 'google-oauth2|118214196146974270990', '2023-02-05 12:54:16.532', 'Valvula de purga para compresor, se presenta desarmada', '0901.21.0120', 'KT, VALVE, BLOWDOWN', NULL, 'Lbs');
+INSERT INTO tariff_schedule (id, created_by, created_date, last_modified_by, last_modified_date, base_description, code, document_description, observations, ust) VALUES (7, 'google-oauth2|118214196146974270990', '2023-02-05 12:54:16.532', 'google-oauth2|118214196146974270990', '2023-02-05 12:54:16.532', 'Válvula de purga para compresor, se presenta desarmada', '0901.21.0120', 'KT, VALVE, BLOWDOWN', NULL, 'Lbs');
 
 
 --
@@ -40,6 +40,6 @@ INSERT INTO tariff_schedule (id, created_by, created_date, last_modified_by, las
 -- Data for Name: tariff_schedule_aud; Type: TABLE DATA; Schema: public; Owner: maincas
 --
 
-INSERT INTO tariff_schedule_aud (id, rev, revtype, created_by, created_by_mod, created_date, created_date_mod, last_modified_by, last_modified_by_mod, last_modified_date, last_modified_date_mod, base_description, base_description_mod, code, code_mod, document_description, document_description_mod, observations, observations_mod, ust, ust_mod) VALUES (7, 8, 0, 'google-oauth2|118214196146974270990', true, '2023-02-05 12:54:16.532', true, 'google-oauth2|118214196146974270990', true, '2023-02-05 12:54:16.532', true, 'Valvula de purga para compresor, se presenta desarmada', true, '0901.21.0120', true, 'KT, VALVE, BLOWDOWN', true, NULL, false, 'Lbs', true);
+INSERT INTO tariff_schedule_aud (id, rev, revtype, created_by, created_by_mod, created_date, created_date_mod, last_modified_by, last_modified_by_mod, last_modified_date, last_modified_date_mod, base_description, base_description_mod, code, code_mod, document_description, document_description_mod, observations, observations_mod, ust, ust_mod) VALUES (7, 8, 0, 'google-oauth2|118214196146974270990', true, '2023-02-05 12:54:16.532', true, 'google-oauth2|118214196146974270990', true, '2023-02-05 12:54:16.532', true, 'Válvula de purga para compresor, se presenta desarmada', true, '0901.21.0120', true, 'KT, VALVE, BLOWDOWN', true, NULL, false, 'Lbs', true);
 
 
