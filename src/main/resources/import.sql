@@ -2,12 +2,6 @@ INSERT INTO company (id, created_by, created_date, last_modified_by, last_modifi
 INSERT INTO company (id, created_by, created_date, last_modified_by, last_modified_date, address_city, address_country, address_line_one, address_line_two, address_state, address_zip, alias, block, name, roles) VALUES (3, 'google-oauth2|118214196146974270990', '2023-02-05 12:33:43.012', 'google-oauth2|118214196146974270990', '2023-02-05 12:33:43.012', 'Ciudad Juarez', 'Mexico', 'Ave 5 de Mayo 3312', 'Col. El Barreal', 'Chihuahua', '31486', 'Raw Plastics Juarez', false, 'Raw Plastics SA de CV', 'SELLER');
 INSERT INTO company (id, created_by, created_date, last_modified_by, last_modified_date, address_city, address_country, address_line_one, address_line_two, address_state, address_zip, alias, block, name, roles) VALUES (5, 'google-oauth2|118214196146974270990', '2023-02-05 12:34:54.303', 'google-oauth2|118214196146974270990', '2023-02-05 12:34:54.303', 'Ciudad Juarez', 'Mexico', 'Calle Miguel de la Madrid 719', 'Parq. Ind. Omega', 'Chihuahua', '31428', 'Componentes Industriales Juarez', false, 'Componentes Industriales de la Frontera SA de CV', 'BUYER');
 
-INSERT INTO revinfo (rev, revtstmp) VALUES (2, 1675625554294);
-INSERT INTO revinfo (rev, revtstmp) VALUES (4, 1675625623014);
-INSERT INTO revinfo (rev, revtstmp) VALUES (6, 1675625694307);
-INSERT INTO revinfo (rev, revtstmp) VALUES (8, 1675626856534);
-
-
 --
 -- Data for Name: company_aud; Type: TABLE DATA; Schema: public; Owner: maincas
 --
