@@ -22,7 +22,7 @@ import com.maincas.maincasapi.catalogs.model.TariffSchedule;
 import com.maincas.maincasapi.catalogs.service.TariffScheduleService;
 
 @RestController
-@RequestMapping(path = "/api/tariff", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/api/tariff-schedule", produces = MediaType.APPLICATION_JSON_VALUE)
 // TODO: Configure for production
 @CrossOrigin(origins = "*")
 public class TariffScheduleRestController {
