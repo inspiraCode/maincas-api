@@ -65,6 +65,9 @@ public class MaterialServiceImpl implements MaterialService {
     // material.getTariffSchedule();
     if (Objects.nonNull(material.getTariffSchedule()))
       dbMaterial.setTariffSchedule(material.getTariffSchedule());
+    // material.getObservations()
+    if (Objects.nonNull(material.getObservations()) && !"".equalsIgnoreCase(material.getObservations()))
+      dbMaterial.setObservations(material.getObservations());
 
     return repo.save(dbMaterial);
   }
