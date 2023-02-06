@@ -48,5 +48,6 @@ public class Material extends Auditable {
   private String legalDescription;
   private String commercialDescription;
   private String sedDescription;
+  private String observations;
 
 }
