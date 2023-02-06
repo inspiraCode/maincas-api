@@ -33,9 +33,8 @@ public class SecurityConfig {
      * our app to serve as
      * an OAuth2 Resource Server, using JWT validation.
      */
-    http.authorizeRequests()
+    http.cors().and().authorizeRequests()
         .antMatchers("/api/**").authenticated()
-        .and().cors()
         .and().oauth2ResourceServer().jwt();
     return http.build();
   }
