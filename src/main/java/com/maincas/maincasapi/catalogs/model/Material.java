@@ -36,9 +36,6 @@ public class Material extends Auditable {
   @JoinColumn(name = "buyer_id")
   private Company buyer;
   @ManyToOne(optional = false)
-  @JoinColumn(name = "seller_id")
-  private Company seller;
-  @ManyToOne(optional = false)
   @JoinColumn(name = "tariff_id")
   private TariffSchedule tariffSchedule;
   @ManyToOne(optional = false)
