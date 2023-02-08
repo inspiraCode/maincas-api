@@ -6,10 +6,8 @@ import javax.persistence.ManyToOne;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import org.hibernate.envers.AuditOverride;
-import org.hibernate.envers.Audited;
 
-import com.maincas.maincasapi.model.Auditable;
+import com.maincas.maincasapi.model.UserComment;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,21 +23,10 @@ import lombok.ToString;
 @Builder
 @ToString
 @EqualsAndHashCode(callSuper = false)
-@Audited(withModifiedFlag = true)
-@AuditOverride(forClass = Auditable.class)
-public class PartNumber extends Auditable {
+public class TariffScheduleUserComment extends UserComment {
   @ManyToOne(optional = false)
-  @JoinColumn(name = "buyer_id")
+  @JoinColumn(name = "tariff_schedule_id")
   @OnDelete(action = OnDeleteAction.CASCADE)
-  private Company buyer;
-
-  @ManyToOne(optional = false)
-  @JoinColumn(name = "material_id")
-  @OnDelete(action = OnDeleteAction.CASCADE)
-  private Material material;
+  private TariffSchedule tariffSchedule;
   
-  private Double minStock;
-  private String measureUnit;
-  // example: FELI-OME-A012
-  private String storageLocation;
 }

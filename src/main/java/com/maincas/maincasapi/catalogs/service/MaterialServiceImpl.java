@@ -9,7 +9,8 @@ import com.maincas.maincasapi.catalogs.repository.MaterialRepository;
 import com.maincas.maincasapi.service.AbstractMaincasServiceImpl;
 
 @Service
-public class MaterialServiceImpl extends AbstractMaincasServiceImpl<Material, MaterialRepository> implements MaterialService {
+public class MaterialServiceImpl extends AbstractMaincasServiceImpl<Material, MaterialRepository>
+    implements MaterialService {
 
   @Override
   public Material update(Long id, Material material) {
@@ -18,9 +19,9 @@ public class MaterialServiceImpl extends AbstractMaincasServiceImpl<Material, Ma
     if (Objects.nonNull(material.getApprovedImpo()))
       dbMaterial.setApprovedImpo(material.getApprovedImpo());
 
-    // material.getBuyer();
-    if (Objects.nonNull(material.getBuyer()))
-      dbMaterial.setBuyer(material.getBuyer());
+    // material.getCompany();
+    if (Objects.nonNull(material.getCompany()))
+      dbMaterial.setCompany(material.getCompany());
     // material.getCommercialDescription();
     if (Objects.nonNull(material.getCommercialDescription())
         && !"".equalsIgnoreCase(material.getCommercialDescription()))

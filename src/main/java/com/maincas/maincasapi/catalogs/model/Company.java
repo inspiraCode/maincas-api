@@ -1,9 +1,6 @@
 package com.maincas.maincasapi.catalogs.model;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 
 import org.hibernate.envers.AuditOverride;
 import org.hibernate.envers.Audited;
@@ -27,9 +24,6 @@ import lombok.ToString;
 @Audited(withModifiedFlag = true)
 @AuditOverride(forClass = Auditable.class)
 public class Company extends Auditable {
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private Long id;
   private String alias;
   private String name;
   private String addressLineOne;

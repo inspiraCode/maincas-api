@@ -4,6 +4,8 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.envers.AuditOverride;
 import org.hibernate.envers.Audited;
 
@@ -27,11 +29,15 @@ import lombok.ToString;
 @AuditOverride(forClass = Auditable.class)
 public class Material extends Auditable {
   @ManyToOne(optional = false)
-  @JoinColumn(name = "buyer_id")
-  private Company buyer;
+  @JoinColumn(name = "company_id")
+  @OnDelete(action = OnDeleteAction.CASCADE)
+  private Company company;
+
   @ManyToOne(optional = false)
   @JoinColumn(name = "tariff_id")
+  @OnDelete(action = OnDeleteAction.CASCADE)
   private TariffSchedule tariffSchedule;
+  
   // SED = Shipper Export Declaration
   @ManyToOne(optional = false)
   @JoinColumn(name = "sed_tariff_id")

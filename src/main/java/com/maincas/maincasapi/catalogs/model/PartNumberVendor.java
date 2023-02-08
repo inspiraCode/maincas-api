@@ -4,6 +4,8 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.envers.AuditOverride;
 import org.hibernate.envers.Audited;
 
@@ -28,10 +30,14 @@ import lombok.ToString;
 public class PartNumberVendor extends Auditable {
   @ManyToOne(optional = false)
   @JoinColumn(name = "seller_id")
+  @OnDelete(action = OnDeleteAction.CASCADE)
   private Company seller;
+
   @ManyToOne(optional = false)
   @JoinColumn(name = "part_number_id")
+  @OnDelete(action = OnDeleteAction.CASCADE)
   private PartNumber partNumber;
+  
   private Integer packingUnit;
   private Double pricePerItem;
   private String currency;

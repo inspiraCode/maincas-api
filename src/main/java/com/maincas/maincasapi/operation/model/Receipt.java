@@ -3,9 +3,6 @@ package com.maincas.maincasapi.operation.model;
 import java.util.Date;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
@@ -34,9 +31,6 @@ import lombok.ToString;
 @Audited(withModifiedFlag = true)
 @AuditOverride(forClass = Auditable.class)
 public class Receipt extends Auditable {
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private Long id;
   private String documentNumber;
   private String trackingNumber;
   @Temporal(TemporalType.DATE)
