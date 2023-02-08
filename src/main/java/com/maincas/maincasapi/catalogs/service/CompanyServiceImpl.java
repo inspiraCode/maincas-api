@@ -2,40 +2,18 @@ package com.maincas.maincasapi.catalogs.service;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
-import org.hibernate.envers.AuditReader;
-import org.hibernate.envers.query.AuditEntity;
-import org.hibernate.envers.query.AuditQuery;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.maincas.maincasapi.catalogs.model.Company;
 import com.maincas.maincasapi.catalogs.repository.CompanyRepository;
+import com.maincas.maincasapi.service.AbstractMaincasServiceImpl;
 
 @Service
-public class CompanyServiceImpl implements CompanyService {
-
-  @Autowired
-  CompanyRepository repo;
-
-  @Autowired
-  private AuditReader auditReader;
+public class CompanyServiceImpl extends AbstractMaincasServiceImpl<Company, CompanyRepository> implements CompanyService {
 
   @Override
-  public List<Company> fetchAllCompanies() {
-    return StreamSupport.stream(repo.findAll().spliterator(), false).collect(Collectors.toList());
-  }
-
-  @Override
-  public Company fetchById(Long id) {
-    return repo.findById(id)
-        .orElseThrow(() -> new IllegalArgumentException(String.format("Unable to find company by id {}", id)));
-  }
-
-  @Override
-  public Company updateCompany(Long id, Company company) {
+  public Company update(Long id, Company company) {
     Company dbCompany = repo.findById(id)
         .orElseThrow(() -> new IllegalArgumentException(String.format("Unable to find company by id {}", id)));
 
@@ -85,31 +63,6 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     return repo.save(dbCompany);
-  }
-
-  @Override
-  public Company createCompany(Company company) {
-    return repo.save(company);
-  }
-
-  @Override
-  public void deleteCompanyById(Long id) {
-    repo.deleteById(id);
-  }
-
-  @Override
-  public List<?> getRevisions(Long id, boolean fetchChanges) {
-    AuditQuery auditQuery = null;
-
-    if (fetchChanges) {
-      auditQuery = auditReader.createQuery()
-          .forRevisionsOfEntityWithChanges(Company.class, true);
-    } else {
-      auditQuery = auditReader.createQuery()
-          .forRevisionsOfEntity(Company.class, true);
-    }
-    auditQuery.add(AuditEntity.id().eq(id));
-    return auditQuery.getResultList();
   }
 
   public List<Company> fetchByRole(String role){

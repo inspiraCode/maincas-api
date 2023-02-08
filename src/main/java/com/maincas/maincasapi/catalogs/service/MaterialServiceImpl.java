@@ -1,41 +1,18 @@
 package com.maincas.maincasapi.catalogs.service;
 
-import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
-import org.hibernate.envers.AuditReader;
-import org.hibernate.envers.query.AuditEntity;
-import org.hibernate.envers.query.AuditQuery;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.maincas.maincasapi.catalogs.model.Material;
 import com.maincas.maincasapi.catalogs.repository.MaterialRepository;
+import com.maincas.maincasapi.service.AbstractMaincasServiceImpl;
 
 @Service
-public class MaterialServiceImpl implements MaterialService {
-
-  @Autowired
-  MaterialRepository repo;
-
-  @Autowired
-  private AuditReader auditReader;
+public class MaterialServiceImpl extends AbstractMaincasServiceImpl<Material, MaterialRepository> implements MaterialService {
 
   @Override
-  public List<Material> fetchAllMaterials() {
-    return StreamSupport.stream(repo.findAll().spliterator(), false).collect(Collectors.toList());
-  }
-
-  @Override
-  public Material fetchById(Long id) {
-    return repo.findById(id)
-        .orElseThrow(() -> new IllegalArgumentException(String.format("Unable to find material by id {}", id)));
-  }
-
-  @Override
-  public Material updateMaterial(Long id, Material material) {
+  public Material update(Long id, Material material) {
     Material dbMaterial = fetchById(id);
     // material.getApprovedImpo()
     if (Objects.nonNull(material.getApprovedImpo()))
@@ -68,30 +45,4 @@ public class MaterialServiceImpl implements MaterialService {
 
     return repo.save(dbMaterial);
   }
-
-  @Override
-  public Material createMaterial(Material material) {
-    return repo.save(material);
-  }
-
-  @Override
-  public void deleteMaterialById(Long id) {
-    repo.deleteById(id);
-  }
-
-  @Override
-  public List<?> getRevisions(Long id, boolean fetchChanges) {
-    AuditQuery auditQuery = null;
-
-    if (fetchChanges) {
-      auditQuery = auditReader.createQuery()
-          .forRevisionsOfEntityWithChanges(Material.class, true);
-    } else {
-      auditQuery = auditReader.createQuery()
-          .forRevisionsOfEntity(Material.class, true);
-    }
-    auditQuery.add(AuditEntity.id().eq(id));
-    return auditQuery.getResultList();
-  }
-
 }

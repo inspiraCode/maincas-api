@@ -1,19 +1,8 @@
 package com.maincas.maincasapi.catalogs.service;
 
-import java.util.List;
-
 import com.maincas.maincasapi.catalogs.model.TariffSchedule;
+import com.maincas.maincasapi.service.IMaincasService;
 
-public interface TariffScheduleService {
-  List<TariffSchedule> fetchAllTariffSchedules();
-
-  TariffSchedule fetchById(Long id);
-
-  TariffSchedule updateTariffSchedule(Long id, TariffSchedule tariffSchedule);
-
-  TariffSchedule createTariffSchedule(TariffSchedule tariffSchedule);
-
-  void deleteTariffScheduleById(Long id);
-
-  List<?> getRevisions(Long id, boolean fetchChanges);
+public interface TariffScheduleService extends IMaincasService<TariffSchedule> {
+  
 }
