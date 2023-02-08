@@ -6,11 +6,11 @@ import org.springframework.stereotype.Service;
 
 import com.maincas.maincasapi.operation.model.ReceiptUserComment;
 import com.maincas.maincasapi.operation.repository.ReceiptUserCommentRepository;
-import com.maincas.maincasapi.service.AbstractMaincasItemServiceImpl;
+import com.maincas.maincasapi.service.AbstractUserCommentServiceImpl;
 
 @Service
 public class ReceiptUserCommentServiceImpl extends
-    AbstractMaincasItemServiceImpl<ReceiptUserComment, ReceiptUserCommentRepository>
+    AbstractUserCommentServiceImpl<ReceiptUserComment, ReceiptUserCommentRepository>
     implements ReceiptUserCommentService {
 
   @Override

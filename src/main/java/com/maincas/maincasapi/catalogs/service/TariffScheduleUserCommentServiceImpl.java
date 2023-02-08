@@ -6,11 +6,11 @@ import org.springframework.stereotype.Service;
 
 import com.maincas.maincasapi.catalogs.model.TariffScheduleUserComment;
 import com.maincas.maincasapi.catalogs.repository.TariffScheduleUserCommentRepository;
-import com.maincas.maincasapi.service.AbstractMaincasItemServiceImpl;
+import com.maincas.maincasapi.service.AbstractUserCommentServiceImpl;
 
 @Service
 public class TariffScheduleUserCommentServiceImpl extends
-    AbstractMaincasItemServiceImpl<TariffScheduleUserComment, TariffScheduleUserCommentRepository>
+    AbstractUserCommentServiceImpl<TariffScheduleUserComment, TariffScheduleUserCommentRepository>
     implements TariffScheduleUserCommentService {
 
   @Override

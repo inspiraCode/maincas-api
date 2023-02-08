@@ -6,11 +6,11 @@ import org.springframework.stereotype.Service;
 
 import com.maincas.maincasapi.catalogs.model.MaterialUserComment;
 import com.maincas.maincasapi.catalogs.repository.MaterialUserCommentRepository;
-import com.maincas.maincasapi.service.AbstractMaincasItemServiceImpl;
+import com.maincas.maincasapi.service.AbstractUserCommentServiceImpl;
 
 @Service
 public class MaterialUserCommentServiceImpl extends
-    AbstractMaincasItemServiceImpl<MaterialUserComment, MaterialUserCommentRepository>
+    AbstractUserCommentServiceImpl<MaterialUserComment, MaterialUserCommentRepository>
     implements MaterialUserCommentService {
 
   @Override
