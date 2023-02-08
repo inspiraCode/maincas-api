@@ -9,7 +9,7 @@ import com.maincas.maincasapi.operation.model.ReceiptItem;
 import com.maincas.maincasapi.operation.service.ReceiptItemService;
 
 @RestController
-@RequestMapping(path = "/api/operations/receipt/{receiptId}/items", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/api/operations/receipt/{parentId}/items", produces = MediaType.APPLICATION_JSON_VALUE)
 public class ReceiptItemRestController extends AbstractItemRestController<ReceiptItem, ReceiptItemService> {
 
 }

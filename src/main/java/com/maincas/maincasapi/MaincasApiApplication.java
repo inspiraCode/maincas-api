@@ -6,8 +6,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Info;
+
 @EnableJpaAuditing(auditorAwareRef = "auditorAware")
 @SpringBootApplication
+@OpenAPIDefinition(info = @Info(title = "MAINCAS API", version = "1.0", description = "Manejo Inteligente a Cadena de Suministro - API de servicios"))
 public class MaincasApiApplication {
 
 	public static void main(String[] args) {
