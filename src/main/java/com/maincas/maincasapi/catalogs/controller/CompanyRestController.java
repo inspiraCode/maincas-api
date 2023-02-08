@@ -13,12 +13,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.maincas.maincasapi.catalogs.model.Company;
+import com.maincas.maincasapi.catalogs.model.CompanyUserComment;
 import com.maincas.maincasapi.catalogs.service.CompanyService;
+import com.maincas.maincasapi.catalogs.service.CompanyUserCommentService;
 import com.maincas.maincasapi.controller.AbstractRestController;
 
 @RestController
 @RequestMapping(path = "/api/company", produces = MediaType.APPLICATION_JSON_VALUE)
-public class CompanyRestController extends AbstractRestController<Company, CompanyService> {
+public class CompanyRestController
+    extends AbstractRestController<Company, CompanyService, CompanyUserComment, CompanyUserCommentService> {
   private static final Logger logger = LoggerFactory.getLogger(CompanyRestController.class);
 
   @GetMapping("/roles/{roleName}")

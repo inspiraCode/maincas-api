@@ -10,9 +10,9 @@ import org.hibernate.envers.query.AuditQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
-import com.maincas.maincasapi.model.Auditable;
+import com.maincas.maincasapi.model.Identifiable;
 
-public abstract class AbstractMaincasBaseServiceImpl<T extends Auditable, U extends PagingAndSortingRepository<T, Long>>
+public abstract class AbstractMaincasBaseServiceImpl<T extends Identifiable, U extends PagingAndSortingRepository<T, Long>>
     implements IMaincasBaseService<T> {
   @Autowired
   protected U repo;

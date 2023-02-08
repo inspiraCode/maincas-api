@@ -6,10 +6,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.maincas.maincasapi.controller.AbstractRestController;
 import com.maincas.maincasapi.operation.model.Receipt;
+import com.maincas.maincasapi.operation.model.ReceiptUserComment;
 import com.maincas.maincasapi.operation.service.ReceiptService;
+import com.maincas.maincasapi.operation.service.ReceiptUserCommentService;
 
 @RestController
 @RequestMapping(path = "/api/operations/receipt", produces = MediaType.APPLICATION_JSON_VALUE)
-public class ReceiptRestController extends AbstractRestController<Receipt, ReceiptService> {
+public class ReceiptRestController
+    extends AbstractRestController<Receipt, ReceiptService, ReceiptUserComment, ReceiptUserCommentService> {
 
 }

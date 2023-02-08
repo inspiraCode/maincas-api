@@ -6,9 +6,9 @@ import java.util.stream.StreamSupport;
 
 import org.springframework.data.repository.PagingAndSortingRepository;
 
-import com.maincas.maincasapi.model.Auditable;
+import com.maincas.maincasapi.model.Identifiable;
 
-public abstract class AbstractMaincasServiceImpl<T extends Auditable, U extends PagingAndSortingRepository<T, Long>>
+public abstract class AbstractMaincasServiceImpl<T extends Identifiable, U extends PagingAndSortingRepository<T, Long>>
     extends AbstractMaincasBaseServiceImpl<T, U> implements IMaincasService<T> {
 
   @Override
