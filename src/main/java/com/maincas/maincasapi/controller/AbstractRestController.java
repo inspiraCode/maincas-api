@@ -42,7 +42,7 @@ public abstract class AbstractRestController<T extends Auditable, U extends IMai
     return dbEntity;
   }
 
-  @PostMapping("/{id}/comments")
+  @GetMapping("/{id}/comments")
   public List<V> fetchUserComments(@PathVariable Long id) {
     Type sooper = getClass().getGenericSuperclass();
     Type t = ((ParameterizedType) sooper).getActualTypeArguments()[0];
