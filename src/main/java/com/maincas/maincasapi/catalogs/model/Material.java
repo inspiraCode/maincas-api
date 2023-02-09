@@ -3,6 +3,8 @@ package com.maincas.maincasapi.catalogs.model;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -43,7 +45,11 @@ public class Material extends Auditable {
   @JoinColumn(name = "sed_tariff_id")
   private TariffSchedule sedTariffSchedule;
   private Boolean approvedImpo;
+  @NotNull
+  @NotBlank
   private String legalDescription;
+  @NotNull
+  @NotBlank
   private String commercialDescription;
   // SED = Shipper Export Declaration
   private String sedDescription;

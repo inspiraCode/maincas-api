@@ -1,6 +1,8 @@
 package com.maincas.maincasapi.catalogs.model;
 
 import javax.persistence.Entity;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.envers.AuditOverride;
 import org.hibernate.envers.Audited;
@@ -24,8 +26,14 @@ import lombok.ToString;
 @Audited(withModifiedFlag = true)
 @AuditOverride(forClass = Auditable.class)
 public class TariffSchedule extends Auditable {
+  @NotNull
+  @NotBlank
   private String code;
+  @NotNull
+  @NotBlank
   private String ust;
+  @NotNull
+  @NotBlank
   private String baseDescription;
   private String documentDescription;
   private String observations;

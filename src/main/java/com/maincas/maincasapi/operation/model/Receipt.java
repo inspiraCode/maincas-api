@@ -7,6 +7,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.envers.AuditOverride;
 import org.hibernate.envers.Audited;
@@ -31,6 +33,8 @@ import lombok.ToString;
 @Audited(withModifiedFlag = true)
 @AuditOverride(forClass = Auditable.class)
 public class Receipt extends Auditable {
+  @NotNull
+  @NotBlank
   private String documentNumber;
   private String trackingNumber;
   @Temporal(TemporalType.DATE)

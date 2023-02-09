@@ -3,15 +3,11 @@ package com.maincas.maincasapi.catalogs.model;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import org.hibernate.envers.AuditOverride;
-import org.hibernate.envers.Audited;
 
-import com.maincas.maincasapi.model.Auditable;
+import com.maincas.maincasapi.model.Attachment;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,24 +23,9 @@ import lombok.ToString;
 @Builder
 @ToString
 @EqualsAndHashCode(callSuper = false)
-@Audited(withModifiedFlag = true)
-@AuditOverride(forClass = Auditable.class)
-public class PartNumberVendor extends Auditable {
-  @ManyToOne(optional = false)
-  @JoinColumn(name = "seller_id")
-  @OnDelete(action = OnDeleteAction.CASCADE)
-  private Company seller;
-
+public class PartNumberAttachment extends Attachment {
   @ManyToOne(optional = false)
   @JoinColumn(name = "part_number_id")
   @OnDelete(action = OnDeleteAction.CASCADE)
   private PartNumber partNumber;
-
-  private Integer packingUnit;
-  private Double pricePerItem;
-  private String currency;
-  private Double packagePrice;
-  @NotNull
-  @NotBlank
-  private String SKU;
 }

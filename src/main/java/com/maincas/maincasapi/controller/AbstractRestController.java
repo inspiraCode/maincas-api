@@ -12,17 +12,21 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.maincas.maincasapi.model.Attachment;
 import com.maincas.maincasapi.model.Auditable;
-import com.maincas.maincasapi.model.Identifiable;
+import com.maincas.maincasapi.model.UserComment;
 import com.maincas.maincasapi.service.IMaincasItemService;
 import com.maincas.maincasapi.service.IMaincasService;
 
-public abstract class AbstractRestController<T extends Auditable, U extends IMaincasService<T>, V extends Identifiable, W extends IMaincasItemService<V>>
+public abstract class AbstractRestController<T extends Auditable, U extends IMaincasService<T>, V extends UserComment, W extends IMaincasItemService<V>, X extends Attachment, Y extends IMaincasItemService<X>>
     extends AbstractBaseRestController<T, U> {
 
   private static final Logger logger = LoggerFactory.getLogger(AbstractRestController.class);
   @Autowired
   protected W commentsService;
+
+  @Autowired
+  protected Y attachmentService;
 
   @GetMapping(path = "/list")
   public List<T> entityList() {
@@ -48,6 +52,32 @@ public abstract class AbstractRestController<T extends Auditable, U extends IMai
     Type t = ((ParameterizedType) sooper).getActualTypeArguments()[0];
     logger.info("LIST all user comments for {} with  parent id {}", t.toString(), id);
     return commentsService.fetchByParentId(id);
+  }
+
+  @PostMapping("/{id}/attachments/create")
+  public X createAttachment(@RequestBody X entity) {
+    Type sooper = getClass().getGenericSuperclass();
+    Type t = ((ParameterizedType) sooper).getActualTypeArguments()[0];
+    logger.info("CREATING {} record with value {}", t.toString(), entity);
+    X dbEntity = attachmentService.create(entity);
+    logger.info("Entity created, assigned id {}", dbEntity.getId());
+    return dbEntity;
+  }
+
+  @GetMapping("/{id}/attachments")
+  public List<X> fetchAttachments(@PathVariable Long id) {
+    Type sooper = getClass().getGenericSuperclass();
+    Type t = ((ParameterizedType) sooper).getActualTypeArguments()[0];
+    logger.info("LIST all attachments for {} with  parent id {}", t.toString(), id);
+    return attachmentService.fetchByParentId(id);
+  }
+
+  @GetMapping("/attachments/{id}")
+  public X downloadAttachment(@PathVariable Long id) {
+    Type sooper = getClass().getGenericSuperclass();
+    Type t = ((ParameterizedType) sooper).getActualTypeArguments()[0];
+    logger.info("DOWNLOAD attachment for {} with attachmentId {}", t.toString(), id);
+    return attachmentService.fetchById(id);
   }
 
 }

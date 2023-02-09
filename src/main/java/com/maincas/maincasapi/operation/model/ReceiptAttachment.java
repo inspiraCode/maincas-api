@@ -3,14 +3,11 @@ package com.maincas.maincasapi.operation.model;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.validation.constraints.Min;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import org.hibernate.envers.AuditOverride;
-import org.hibernate.envers.Audited;
 
-import com.maincas.maincasapi.model.Auditable;
+import com.maincas.maincasapi.model.Attachment;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,23 +23,9 @@ import lombok.ToString;
 @Builder
 @ToString
 @EqualsAndHashCode(callSuper = false)
-@Audited(withModifiedFlag = true)
-@AuditOverride(forClass = Auditable.class)
-public class ReceiptItem extends Auditable {
-  @Min(value = 1, message = "Index must start with 1")
-  private Integer index;
-  @Min(value = 1, message = "At least 1 package per item")
-  private Integer quantity;
-  private String packingUnitOfMeasure;
-  private Double grossWeightLbs;
-  private Double grossWeightKg;
-  private String description;
-  private String unIdentifier;
-  private Boolean wooden;
-
+public class ReceiptAttachment extends Attachment {
   @ManyToOne(optional = false)
   @JoinColumn(name = "receipt_id")
   @OnDelete(action = OnDeleteAction.CASCADE)
   private Receipt receipt;
-
 }

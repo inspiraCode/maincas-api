@@ -1,6 +1,8 @@
 package com.maincas.maincasapi.catalogs.model;
 
 import javax.persistence.Entity;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.envers.AuditOverride;
 import org.hibernate.envers.Audited;
@@ -24,7 +26,11 @@ import lombok.ToString;
 @Audited(withModifiedFlag = true)
 @AuditOverride(forClass = Auditable.class)
 public class Company extends Auditable {
+  @NotNull
+  @NotBlank
   private String alias;
+  @NotNull
+  @NotBlank
   private String name;
   private String addressLineOne;
   private String addressLineTwo;
@@ -32,6 +38,10 @@ public class Company extends Auditable {
   private String addressState;
   private String addressZip;
   private String addressCountry;
+  @NotNull
+  @NotBlank
   private String roles;
+  @NotNull
+  @NotBlank
   private Boolean block;
 }

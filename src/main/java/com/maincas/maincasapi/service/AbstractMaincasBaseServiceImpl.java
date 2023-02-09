@@ -32,10 +32,9 @@ public abstract class AbstractMaincasBaseServiceImpl<T extends Identifiable, U e
 
   @Override
   public T fetchById(Long id) {
-    Type sooper = getClass().getGenericSuperclass();
-    Type t = ((ParameterizedType) sooper).getActualTypeArguments()[0];
+    String errorMessage = String.format("Unable to find {} by id {}", getType().toString(), id);
     return repo.findById(id)
-        .orElseThrow(() -> new IllegalArgumentException(String.format("Unable to find {} by id {}", t.toString(), id)));
+        .orElseThrow(() -> new IllegalArgumentException(errorMessage));
   }
 
   @Override
@@ -47,17 +46,19 @@ public abstract class AbstractMaincasBaseServiceImpl<T extends Identifiable, U e
   @Override
   public List<?> getRevisions(Long id, boolean fetchChanges) {
     AuditQuery auditQuery = null;
-    Type sooper = getClass().getGenericSuperclass();
-    Type t = ((ParameterizedType) sooper).getActualTypeArguments()[0];
-
     if (fetchChanges) {
       auditQuery = auditReader.createQuery()
-          .forRevisionsOfEntityWithChanges(t.getClass(), true);
+          .forRevisionsOfEntityWithChanges(getType().getClass(), true);
     } else {
       auditQuery = auditReader.createQuery()
-          .forRevisionsOfEntity(t.getClass(), true);
+          .forRevisionsOfEntity(getType().getClass(), true);
     }
     auditQuery.add(AuditEntity.id().eq(id));
     return auditQuery.getResultList();
+  }
+
+  protected Type getType() {
+    Type sooper = getClass().getGenericSuperclass();
+    return ((ParameterizedType) sooper).getActualTypeArguments()[0];
   }
 }
