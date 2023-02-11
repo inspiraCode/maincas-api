@@ -9,6 +9,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,17 +30,17 @@ public abstract class AbstractBaseRestController<T extends Auditable, U extends 
   protected U service;
 
   @PostMapping("/create")
-  public T create(@RequestBody T entity) {
+  public ResponseEntity<T> create(@RequestBody T entity) {
     Type sooper = getClass().getGenericSuperclass();
     Type t = ((ParameterizedType) sooper).getActualTypeArguments()[0];
     logger.info("CREATING {} record with value {}", t.toString(), entity);
     T dbEntity = service.create(entity);
     logger.info("Entity created, assigned id {}", dbEntity.getId());
-    return dbEntity;
+    return new ResponseEntity<T>(dbEntity, HttpStatus.CREATED);
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<?> getById(@PathVariable Long id) {
+  public ResponseEntity<T> getById(@PathVariable Long id) {
     Type sooper = getClass().getGenericSuperclass();
     Type t = ((ParameterizedType) sooper).getActualTypeArguments()[0];
     logger.info("GET {} record with ID {}", t.toString(), id);
@@ -47,7 +48,7 @@ public abstract class AbstractBaseRestController<T extends Auditable, U extends 
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<?> update(@PathVariable Long id, @RequestBody T entity) {
+  public ResponseEntity<T> update(@PathVariable Long id, @RequestBody T entity) {
     Type sooper = getClass().getGenericSuperclass();
     Type t = ((ParameterizedType) sooper).getActualTypeArguments()[0];
     logger.info("UPDATE {} record with ID {}, set value {}", t.toString(), id, entity);
