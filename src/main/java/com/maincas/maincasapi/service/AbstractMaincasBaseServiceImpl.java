@@ -3,6 +3,7 @@ package com.maincas.maincasapi.service;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
+import java.util.Optional;
 
 import org.hibernate.envers.AuditReader;
 import org.hibernate.envers.query.AuditEntity;
@@ -31,10 +32,8 @@ public abstract class AbstractMaincasBaseServiceImpl<T extends Identifiable, U e
   }
 
   @Override
-  public T fetchById(Long id) {
-    String errorMessage = String.format("Unable to find {} by id {}", getType().toString(), id);
-    return repo.findById(id)
-        .orElseThrow(() -> new IllegalArgumentException(errorMessage));
+  public Optional<T> fetchById(Long id) {
+    return repo.findById(id);
   }
 
   @Override

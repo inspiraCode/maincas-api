@@ -5,6 +5,7 @@ import java.lang.reflect.Type;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,7 +45,10 @@ public abstract class AbstractBaseRestController<T extends Auditable, U extends 
     Type sooper = getClass().getGenericSuperclass();
     Type t = ((ParameterizedType) sooper).getActualTypeArguments()[0];
     logger.info("GET {} record with ID {}", t.toString(), id);
-    return ResponseEntity.ok(service.fetchById(id));
+
+    return service.fetchById(id)
+        .map(ResponseEntity::ok)
+        .orElseGet(() -> ResponseEntity.notFound().build());
   }
 
   @PutMapping("/{id}")
@@ -52,7 +56,13 @@ public abstract class AbstractBaseRestController<T extends Auditable, U extends 
     Type sooper = getClass().getGenericSuperclass();
     Type t = ((ParameterizedType) sooper).getActualTypeArguments()[0];
     logger.info("UPDATE {} record with ID {}, set value {}", t.toString(), id, entity);
-    return ResponseEntity.ok(service.update(id, entity));
+
+    Optional<T> dbEntity = service.fetchById(id);
+    if (dbEntity.isPresent()) {
+      return ResponseEntity.ok(service.update(id, entity));
+    } else {
+      return ResponseEntity.notFound().build();
+    }
   }
 
   @DeleteMapping("/{id}")
@@ -61,10 +71,16 @@ public abstract class AbstractBaseRestController<T extends Auditable, U extends 
     Type t = ((ParameterizedType) sooper).getActualTypeArguments()[0];
     logger.info("DELETE {} record with ID {}", t.toString(), id);
 
-    service.deleteById(id);
-    Map<String, Boolean> map = new LinkedHashMap<>();
-    map.put("deleted", Boolean.TRUE);
-    return ResponseEntity.ok(map);
+    Optional<T> dbEntity = service.fetchById(id);
+    if (dbEntity.isPresent()) {
+      service.deleteById(id);
+      Map<String, Boolean> map = new LinkedHashMap<>();
+      map.put("deleted", Boolean.TRUE);
+      return ResponseEntity.ok(map);
+    } else {
+      return ResponseEntity.notFound().build();
+    }
+
   }
 
   @GetMapping("/{id}/revisions")

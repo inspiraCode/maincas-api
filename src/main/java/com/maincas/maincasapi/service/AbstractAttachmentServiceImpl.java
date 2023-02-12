@@ -8,6 +8,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,13 +43,14 @@ public abstract class AbstractAttachmentServiceImpl<T extends Attachment, U exte
   }
 
   @Override
-  public T fetchById(Long id) {
-    T dbEntity = super.fetchById(id);
+  public Optional<T> fetchById(Long id) {
+    String errorMessage = String.format("Unable to find {} by id {}", getType().toString(), id);
+    T dbEntity = super.fetchById(id).orElseThrow(() -> new IllegalArgumentException(errorMessage));
 
     String objectKey = String.format("%s%s_%d", FK_PREFIX, getType().getClass().getTypeName(), id);
-    dbEntity.setBase64(s3Base64(objectKey));;
+    dbEntity.setBase64(s3Base64(objectKey));
 
-    return dbEntity;
+    return Optional.of(dbEntity);
   }
 
   private String s3Base64(String objectKey) {

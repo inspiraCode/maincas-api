@@ -25,7 +25,8 @@ public abstract class AbstractUserCommentServiceImpl<T extends UserComment, U ex
   @Override
   public T update(Long id, T entity) {
     String loggedInUser = getAuthenticatedUser();
-    T dbEntity = super.fetchById(id);
+    String errorMessage = String.format("Unable to find {} by id {}", getType().toString(), id);
+    T dbEntity = super.fetchById(id).orElseThrow(() -> new IllegalArgumentException(errorMessage));
     if (!loggedInUser.equalsIgnoreCase(dbEntity.getCreatedBy()))
       throw new IllegalArgumentException(
           String.format("The user that created the comment must be the same to modify it ({})", loggedInUser));
@@ -33,7 +34,7 @@ public abstract class AbstractUserCommentServiceImpl<T extends UserComment, U ex
     if (Objects.nonNull(entity.getComment()) && !"".equalsIgnoreCase(entity.getComment())) {
       dbEntity.setComment(entity.getComment());
     }
-    
+
     return super.update(id, entity);
   }
 

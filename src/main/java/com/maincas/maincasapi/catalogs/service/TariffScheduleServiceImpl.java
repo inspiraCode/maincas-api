@@ -9,11 +9,13 @@ import com.maincas.maincasapi.catalogs.repository.TariffScheduleRepository;
 import com.maincas.maincasapi.service.AbstractMaincasServiceImpl;
 
 @Service
-public class TariffScheduleServiceImpl extends AbstractMaincasServiceImpl<TariffSchedule, TariffScheduleRepository> implements TariffScheduleService {
+public class TariffScheduleServiceImpl extends AbstractMaincasServiceImpl<TariffSchedule, TariffScheduleRepository>
+    implements TariffScheduleService {
 
   @Override
   public TariffSchedule update(Long id, TariffSchedule tariffSchedule) {
-    TariffSchedule dbTs = fetchById(id);
+    String errorMessage = String.format("Unable to find {} by id {}", getType().toString(), id);
+    TariffSchedule dbTs = fetchById(id).orElseThrow(() -> new IllegalArgumentException(errorMessage));
 
     if (Objects.nonNull(tariffSchedule.getBaseDescription())
         && !"".equalsIgnoreCase(tariffSchedule.getBaseDescription()))
@@ -38,5 +40,5 @@ public class TariffScheduleServiceImpl extends AbstractMaincasServiceImpl<Tariff
 
     return repo.save(dbTs);
   }
-  
+
 }
