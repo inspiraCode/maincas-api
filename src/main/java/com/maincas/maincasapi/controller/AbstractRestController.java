@@ -7,6 +7,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,13 +39,13 @@ public abstract class AbstractRestController<T extends Auditable, U extends IMai
   }
 
   @PostMapping("/{id}/comments/create")
-  public V createUserComment(@RequestBody V entity) {
+  public ResponseEntity<V> createUserComment(@RequestBody V entity) {
     Type sooper = getClass().getGenericSuperclass();
     Type t = ((ParameterizedType) sooper).getActualTypeArguments()[0];
     logger.info("CREATING {} record with value {}", t.toString(), entity);
     V dbEntity = commentsService.create(entity);
     logger.info("Entity created, assigned id {}", dbEntity.getId());
-    return dbEntity;
+    return new ResponseEntity<V>(dbEntity, HttpStatus.CREATED);
   }
 
   @GetMapping("/{id}/comments")

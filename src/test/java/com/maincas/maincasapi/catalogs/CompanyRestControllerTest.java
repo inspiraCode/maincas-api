@@ -29,6 +29,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.maincas.maincasapi.catalogs.controller.CompanyRestController;
 import com.maincas.maincasapi.catalogs.model.Company;
+import com.maincas.maincasapi.catalogs.model.CompanyUserComment;
 import com.maincas.maincasapi.catalogs.service.CompanyAttachmentService;
 import com.maincas.maincasapi.catalogs.service.CompanyService;
 import com.maincas.maincasapi.catalogs.service.CompanyUserCommentService;
@@ -326,6 +327,38 @@ public class CompanyRestControllerTest {
 
     response.andExpect(status().isNotFound())
         .andDo(print());
+  }
+
+  @Test
+  public void givenCompanyUserComment_whenCreateCompanyUserComment_thenReturnSavedCompanyUserComment()
+      throws Exception {
+    Company company = Company.builder()
+        .name("ACME Company")
+        .alias("ACME Company alias")
+        .addressLineOne("123 Main St.")
+        .addressLineTwo("Bldg 2")
+        .addressCity("Laredo")
+        .addressState("TX")
+        .addressZip("73123")
+        .addressCountry("USA")
+        .roles("BUYER")
+        .block(false)
+        .build();
+    CompanyUserComment comment = CompanyUserComment.builder().company(company).build();
+    comment.setComment("test comment");
+    comment.setCreatedBy("testUser");
+
+    given(commentService.create(any(CompanyUserComment.class)))
+        .willAnswer((invocation) -> invocation.getArgument(0));
+
+    ResultActions response = mockMvc.perform(post("/api/company/{id}/comments/create", 1L).with(csrf())
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(comment)));
+
+    response.andDo(print())
+        .andExpect(status().isCreated())
+        .andExpect(jsonPath("$.comment", is(comment.getComment())))
+        .andExpect(jsonPath("$.createdBy", is(comment.getCreatedBy())));
   }
 
 }
