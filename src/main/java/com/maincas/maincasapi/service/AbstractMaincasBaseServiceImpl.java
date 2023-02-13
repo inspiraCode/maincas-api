@@ -9,11 +9,11 @@ import org.hibernate.envers.AuditReader;
 import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.AuditQuery;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.maincas.maincasapi.model.Identifiable;
 
-public abstract class AbstractMaincasBaseServiceImpl<T extends Identifiable, U extends PagingAndSortingRepository<T, Long>>
+public abstract class AbstractMaincasBaseServiceImpl<T extends Identifiable, U extends JpaRepository<T, Long>>
     implements IMaincasBaseService<T> {
   @Autowired
   protected U repo;

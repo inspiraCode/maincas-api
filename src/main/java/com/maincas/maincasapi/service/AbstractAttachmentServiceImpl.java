@@ -13,13 +13,13 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.amazonaws.services.s3.model.PutObjectResult;
 import com.amazonaws.services.s3.model.S3Object;
 import com.maincas.maincasapi.model.Attachment;
 
-public abstract class AbstractAttachmentServiceImpl<T extends Attachment, U extends PagingAndSortingRepository<T, Long>>
+public abstract class AbstractAttachmentServiceImpl<T extends Attachment, U extends JpaRepository<T, Long>>
     extends AbstractMaincasBaseServiceImpl<T, U> implements IMaincasItemService<T> {
 
   private static final Logger logger = LoggerFactory.getLogger(AbstractAttachmentServiceImpl.class);

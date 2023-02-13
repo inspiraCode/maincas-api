@@ -2,6 +2,7 @@ package com.maincas.maincasapi;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
@@ -13,13 +14,16 @@ import org.springframework.security.oauth2.jwt.JwtValidators;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * Configures our application with Spring Security to restrict access to our API
  * endpoints.
  */
+@Configuration
 @EnableWebSecurity
+@Slf4j
 public class SecurityConfig {
-
   @Value("${auth0.audience}")
   private String audience;
 
@@ -28,14 +32,11 @@ public class SecurityConfig {
 
   @Bean
   SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    /*
-     * This is where we configure the security required for our endpoints and setup
-     * our app to serve as
-     * an OAuth2 Resource Server, using JWT validation.
-     */
-    http.cors().and().authorizeRequests()
-        .antMatchers("/api/**").authenticated()
-        .and().oauth2ResourceServer().jwt();
+    log.info("ENABLING security filter chain.");
+    http.cors().and().csrf().disable().headers().frameOptions().deny()
+        .and().authorizeHttpRequests().requestMatchers("/swagger-ui/**").permitAll()
+        .and().authorizeHttpRequests(ar -> ar.requestMatchers("/api/**").authenticated()).oauth2ResourceServer().jwt();
+
     return http.build();
   }
 
@@ -57,4 +58,5 @@ public class SecurityConfig {
 
     return jwtDecoder;
   }
+
 }

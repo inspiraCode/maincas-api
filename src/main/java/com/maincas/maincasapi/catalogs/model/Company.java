@@ -1,8 +1,8 @@
 package com.maincas.maincasapi.catalogs.model;
 
-import javax.persistence.Entity;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import jakarta.persistence.Entity;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import org.hibernate.envers.AuditOverride;
 import org.hibernate.envers.Audited;

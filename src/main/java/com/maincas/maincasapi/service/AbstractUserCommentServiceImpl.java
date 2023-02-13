@@ -3,14 +3,14 @@ package com.maincas.maincasapi.service;
 import java.util.Date;
 import java.util.Objects;
 
-import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.maincas.maincasapi.model.UserComment;
 
-public abstract class AbstractUserCommentServiceImpl<T extends UserComment, U extends PagingAndSortingRepository<T, Long>>
+public abstract class AbstractUserCommentServiceImpl<T extends UserComment, U extends JpaRepository<T, Long>>
     extends AbstractMaincasItemServiceImpl<T, U> {
 
   @Override
