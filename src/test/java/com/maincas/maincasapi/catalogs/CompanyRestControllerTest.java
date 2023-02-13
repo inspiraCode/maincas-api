@@ -344,9 +344,11 @@ public class CompanyRestControllerTest {
         .roles("BUYER")
         .block(false)
         .build();
-    CompanyUserComment comment = CompanyUserComment.builder().company(company).build();
-    comment.setComment("test comment");
-    comment.setCreatedBy("testUser");
+    CompanyUserComment comment = CompanyUserComment.builder()
+        .company(company)
+        .comment("test comment")
+        .createdBy("testUser")
+        .build();
 
     given(commentService.create(any(CompanyUserComment.class)))
         .willAnswer((invocation) -> invocation.getArgument(0));
@@ -359,6 +361,41 @@ public class CompanyRestControllerTest {
         .andExpect(status().isCreated())
         .andExpect(jsonPath("$.comment", is(comment.getComment())))
         .andExpect(jsonPath("$.createdBy", is(comment.getCreatedBy())));
+  }
+
+  @Test
+  public void giventListOfCompanyUserComments_whenGetCompanyComments_thenReturnCompanyUserCommentsList()
+      throws Exception {
+    List<CompanyUserComment> listOfComments = new ArrayList<>();
+    Company company = Company.builder()
+        .name("ACME Company")
+        .alias("ACME Company alias")
+        .addressLineOne("123 Main St.")
+        .addressLineTwo("Bldg 2")
+        .addressCity("Laredo")
+        .addressState("TX")
+        .addressZip("73123")
+        .addressCountry("USA")
+        .roles("BUYER")
+        .block(false)
+        .build();
+    listOfComments.add(CompanyUserComment.builder()
+        .company(company)
+        .comment("test comment 1")
+        .createdBy("testUser")
+        .build());
+    listOfComments.add(CompanyUserComment.builder()
+        .company(company)
+        .comment("test comment 2")
+        .createdBy("testUser")
+        .build());
+
+    given(commentService.fetchByParentId(1L)).willReturn(listOfComments);
+    ResultActions response = mockMvc.perform(get("/api/company/{id}/comments", 1L));
+
+    response.andExpect(status().isOk())
+        .andDo(print())
+        .andExpect(jsonPath("$.size()", is(listOfComments.size())));
   }
 
 }

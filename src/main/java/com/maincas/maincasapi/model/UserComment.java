@@ -8,13 +8,16 @@ import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
 @MappedSuperclass
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserComment extends Identifiable {
   @Column(name = "created_by", updatable = false)
   private String createdBy;
