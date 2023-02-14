@@ -401,6 +401,47 @@ public class CompanyRestControllerTest {
 	}
 
 	@Test
+	public void givenUpdatedCompanyComment_whenUpdateCompanyComment_thenReturnUpdatedCompanyComment() throws Exception {
+		Long commentId = 1L;
+
+		Company company = Company.builder()
+				.name("ACME Company")
+				.alias("ACME Company alias")
+				.addressLineOne("123 Main St.")
+				.addressLineTwo("Bldg 2")
+				.addressCity("Laredo")
+				.addressState("TX")
+				.addressZip("73123")
+				.addressCountry("USA")
+				.roles("BUYER")
+				.block(false)
+				.build();
+		CompanyUserComment savedComment = CompanyUserComment.builder()
+				.company(company)
+				.comment("test comment")
+				.createdBy("testUser")
+				.build();
+		CompanyUserComment updatedComment = CompanyUserComment.builder()
+				.company(company)
+				.comment("test comment 2")
+				.createdBy("testUser")
+				.build();
+
+		given(commentService.fetchById(commentId)).willReturn(Optional.of(savedComment));
+		given(commentService.update(any(Long.class), any(CompanyUserComment.class)))
+				.will((invocation) -> invocation.getArgument(1));
+
+		ResultActions response = mockMvc.perform(put("/api/company/{id}/comments/{commentId}", 1L, commentId).with(csrf())
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(updatedComment)));
+
+		response.andExpect(status().isOk())
+				.andDo(print())
+				.andExpect(jsonPath("$.comment", is(updatedComment.getComment())))
+				.andExpect(jsonPath("$.createdBy", is(updatedComment.getCreatedBy())));
+	}
+
+	@Test
 	public void givenCompanyAttachment_whenCreateCompanyAttachment_thenReturnSavedCompanyAttachment() throws Exception {
 		Company company = Company.builder()
 				.name("ACME Company")
@@ -494,5 +535,7 @@ public class CompanyRestControllerTest {
 				.andDo(print())
 				.andExpect(jsonPath("$.size()", is(listOfAttachments.size())));
 	}
+
+	// TODO: Test download attachment
 
 }

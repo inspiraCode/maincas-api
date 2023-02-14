@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.maincas.maincasapi.model.Attachment;
@@ -54,6 +55,16 @@ public abstract class AbstractRestController<T extends Auditable, U extends IMai
     Type t = ((ParameterizedType) sooper).getActualTypeArguments()[0];
     logger.info("LIST all user comments for {} with  parent id {}", t.toString(), id);
     return commentsService.fetchByParentId(id);
+  }
+
+  @PutMapping("/{id}/comments/{commentId}")
+  public ResponseEntity<V> updateUserComment(@PathVariable Long id, @PathVariable Long commentId,
+      @RequestBody V entity) {
+    Type sooper = getClass().getGenericSuperclass();
+    Type t = ((ParameterizedType) sooper).getActualTypeArguments()[0];
+    logger.info("UPDATE {} record with ID {}, set value {}", t.toString(), commentId, entity);
+    V dbEntity = commentsService.update(commentId, entity);
+    return ResponseEntity.ok(dbEntity);
   }
 
   @PostMapping("/{id}/attachments/create")
