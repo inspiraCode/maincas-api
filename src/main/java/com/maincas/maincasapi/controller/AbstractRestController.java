@@ -57,13 +57,13 @@ public abstract class AbstractRestController<T extends Auditable, U extends IMai
   }
 
   @PostMapping("/{id}/attachments/create")
-  public X createAttachment(@RequestBody X entity) {
+  public ResponseEntity<X> createAttachment(@RequestBody X entity) {
     Type sooper = getClass().getGenericSuperclass();
     Type t = ((ParameterizedType) sooper).getActualTypeArguments()[0];
     logger.info("CREATING {} record with value {}", t.toString(), entity);
     X dbEntity = attachmentService.create(entity);
     logger.info("Entity created, assigned id {}", dbEntity.getId());
-    return dbEntity;
+    return new ResponseEntity<X>(dbEntity, HttpStatus.CREATED);
   }
 
   @GetMapping("/{id}/attachments")
