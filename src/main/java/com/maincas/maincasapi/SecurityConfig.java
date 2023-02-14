@@ -34,8 +34,10 @@ public class SecurityConfig {
   SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     log.info("ENABLING security filter chain.");
     http.cors().and().csrf().disable().headers().frameOptions().deny()
-        .and().authorizeHttpRequests().requestMatchers("/swagger-ui/**").permitAll()
-        .and().authorizeHttpRequests(ar -> ar.requestMatchers("/api/**").authenticated()).oauth2ResourceServer().jwt();
+        .and()
+        .authorizeHttpRequests(
+            ar -> ar.requestMatchers("/api/**").authenticated().anyRequest().permitAll())
+        .oauth2ResourceServer().jwt();
 
     return http.build();
   }
