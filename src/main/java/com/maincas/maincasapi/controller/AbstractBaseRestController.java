@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.maincas.maincasapi.model.Auditable;
 import com.maincas.maincasapi.service.IMaincasBaseService;
 
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = { "http://localhost:4200", "http://localhost:3000" })
 public abstract class AbstractBaseRestController<T extends Auditable, U extends IMaincasBaseService<T>> {
   private static final Logger logger = LoggerFactory.getLogger(AbstractBaseRestController.class);
   @Autowired
