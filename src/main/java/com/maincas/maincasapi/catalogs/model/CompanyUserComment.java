@@ -1,14 +1,15 @@
 package com.maincas.maincasapi.catalogs.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import java.util.Date;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import com.maincas.maincasapi.model.UserComment;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,7 +21,6 @@ import lombok.ToString;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @ToString
 @EqualsAndHashCode(callSuper = false)
 public class CompanyUserComment extends UserComment {
@@ -28,4 +28,10 @@ public class CompanyUserComment extends UserComment {
   @JoinColumn(name = "company_id")
   @OnDelete(action = OnDeleteAction.CASCADE)
   private Company company;
+
+  @Builder
+  public CompanyUserComment(String comment, String createdBy, Company company) {
+    super(createdBy, new Date(), comment);
+    this.company = company;
+  }
 }

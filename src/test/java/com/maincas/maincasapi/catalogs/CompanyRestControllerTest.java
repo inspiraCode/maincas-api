@@ -14,6 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,6 +30,8 @@ import org.springframework.test.web.servlet.ResultActions;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.maincas.maincasapi.catalogs.controller.CompanyRestController;
 import com.maincas.maincasapi.catalogs.model.Company;
+import com.maincas.maincasapi.catalogs.model.CompanyAttachment;
+import com.maincas.maincasapi.catalogs.model.CompanyUserComment;
 import com.maincas.maincasapi.catalogs.service.CompanyAttachmentService;
 import com.maincas.maincasapi.catalogs.service.CompanyService;
 import com.maincas.maincasapi.catalogs.service.CompanyUserCommentService;
@@ -37,295 +40,502 @@ import com.maincas.maincasapi.catalogs.service.CompanyUserCommentService;
 @AutoConfigureMockMvc(addFilters = false)
 public class CompanyRestControllerTest {
 
-  @Autowired
-  private MockMvc mockMvc;
+	@Autowired
+	private MockMvc mockMvc;
 
-  @MockBean
-  private CompanyService companyService;
+	@MockBean
+	private CompanyService companyService;
 
-  @MockBean
-  private CompanyUserCommentService commentService;
+	@MockBean
+	private CompanyUserCommentService commentService;
 
-  @MockBean
-  private CompanyAttachmentService attachmentService;
+	@MockBean
+	private CompanyAttachmentService attachmentService;
 
-  @Autowired
-  private ObjectMapper objectMapper;
+	@Autowired
+	private ObjectMapper objectMapper;
 
-  @Test
-  public void givenCompany_whenCreateCompany_thenReturnSavedCompany() throws Exception {
-    // given - precondition setup
-    Company company = Company.builder()
-        .name("ACME Company")
-        .alias("ACME Company alias")
-        .addressLineOne("123 Main St.")
-        .addressLineTwo("Bldg 2")
-        .addressCity("Laredo")
-        .addressState("TX")
-        .addressZip("73123")
-        .addressCountry("USA")
-        .roles("BUYER")
-        .block(false)
-        .build();
+	@Test
+	public void givenCompany_whenCreateCompany_thenReturnSavedCompany() throws Exception {
+		// given - precondition setup
+		Company company = Company.builder()
+				.name("ACME Company")
+				.alias("ACME Company alias")
+				.addressLineOne("123 Main St.")
+				.addressLineTwo("Bldg 2")
+				.addressCity("Laredo")
+				.addressState("TX")
+				.addressZip("73123")
+				.addressCountry("USA")
+				.roles("BUYER")
+				.block(false)
+				.build();
 
-    given(companyService.create(any(Company.class)))
-        .willAnswer((invocation) -> invocation.getArgument(0));
+		given(companyService.create(any(Company.class)))
+				.willAnswer((invocation) -> invocation.getArgument(0));
 
-    // when - action or behaviour that we are going to test
-    ResultActions response = mockMvc.perform(post("/api/company/create").with(csrf())
-        .contentType(MediaType.APPLICATION_JSON)
-        .content(objectMapper.writeValueAsString(company)));
+		// when - action or behaviour that we are going to test
+		ResultActions response = mockMvc.perform(post("/api/company/create").with(csrf())
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(company)));
 
-    // then - verify the result or output using assert statements
-    response.andDo(print())
-        .andExpect(status().isCreated())
-        .andExpect(jsonPath("$.name", is(company.getName())))
-        .andExpect(jsonPath("$.alias", is(company.getAlias())))
-        .andExpect(jsonPath("$.addressLineOne", is(company.getAddressLineOne())))
-        .andExpect(jsonPath("$.addressLineTwo", is(company.getAddressLineTwo())))
-        .andExpect(jsonPath("$.addressCity", is(company.getAddressCity())))
-        .andExpect(jsonPath("$.addressState", is(company.getAddressState())))
-        .andExpect(jsonPath("$.addressZip", is(company.getAddressZip())))
-        .andExpect(jsonPath("$.addressCountry", is(company.getAddressCountry())))
-        .andExpect(jsonPath("$.roles", is(company.getRoles())))
-        .andExpect(jsonPath("$.block", is(company.getBlock())));
+		// then - verify the result or output using assert statements
+		response.andDo(print())
+				.andExpect(status().isCreated())
+				.andExpect(jsonPath("$.name", is(company.getName())))
+				.andExpect(jsonPath("$.alias", is(company.getAlias())))
+				.andExpect(jsonPath("$.addressLineOne", is(company.getAddressLineOne())))
+				.andExpect(jsonPath("$.addressLineTwo", is(company.getAddressLineTwo())))
+				.andExpect(jsonPath("$.addressCity", is(company.getAddressCity())))
+				.andExpect(jsonPath("$.addressState", is(company.getAddressState())))
+				.andExpect(jsonPath("$.addressZip", is(company.getAddressZip())))
+				.andExpect(jsonPath("$.addressCountry", is(company.getAddressCountry())))
+				.andExpect(jsonPath("$.roles", is(company.getRoles())))
+				.andExpect(jsonPath("$.block", is(company.getBlock())));
 
-  }
+	}
 
-  @Test
-  public void giventListOfCompanies_whenGetAllCompanies_thenReturnCompaniesList() throws Exception {
-    List<Company> listOfCompanies = new ArrayList<>();
-    listOfCompanies.add(Company.builder()
-        .name("ACME Company")
-        .alias("ACME Company alias")
-        .addressLineOne("123 Main St.")
-        .addressLineTwo("Bldg 2")
-        .addressCity("Laredo")
-        .addressState("TX")
-        .addressZip("73123")
-        .addressCountry("USA")
-        .roles("BUYER")
-        .block(false)
-        .build());
-    listOfCompanies.add(Company.builder()
-        .name("ACME Company 2")
-        .alias("ACME Company alias 2")
-        .addressLineOne("123 Main St.")
-        .addressLineTwo("Bldg 2")
-        .addressCity("Laredo")
-        .addressState("TX")
-        .addressZip("73123")
-        .addressCountry("USA")
-        .roles("SELLER")
-        .block(false)
-        .build());
+	@Test
+	public void giventListOfCompanies_whenGetAllCompanies_thenReturnCompaniesList() throws Exception {
+		List<Company> listOfCompanies = new ArrayList<>();
+		listOfCompanies.add(Company.builder()
+				.name("ACME Company")
+				.alias("ACME Company alias")
+				.addressLineOne("123 Main St.")
+				.addressLineTwo("Bldg 2")
+				.addressCity("Laredo")
+				.addressState("TX")
+				.addressZip("73123")
+				.addressCountry("USA")
+				.roles("BUYER")
+				.block(false)
+				.build());
+		listOfCompanies.add(Company.builder()
+				.name("ACME Company 2")
+				.alias("ACME Company alias 2")
+				.addressLineOne("123 Main St.")
+				.addressLineTwo("Bldg 2")
+				.addressCity("Laredo")
+				.addressState("TX")
+				.addressZip("73123")
+				.addressCountry("USA")
+				.roles("SELLER")
+				.block(false)
+				.build());
 
-    given(companyService.fetchAll()).willReturn(listOfCompanies);
-    ResultActions response = mockMvc.perform(get("/api/company/list"));
+		given(companyService.fetchAll()).willReturn(listOfCompanies);
+		ResultActions response = mockMvc.perform(get("/api/company/list"));
 
-    response.andExpect(status().isOk())
-        .andDo(print())
-        .andExpect(jsonPath("$.size()", is(listOfCompanies.size())));
-  }
+		response.andExpect(status().isOk())
+				.andDo(print())
+				.andExpect(jsonPath("$.size()", is(listOfCompanies.size())));
+	}
 
-  @Test
-  public void givenListOfCompanies_whenGetCompaniesByRole_thenReturnCompaniesListFilteredWithRole()
-      throws Exception {
-    List<Company> listOfCompanies = new ArrayList<>();
-    String roleName = "BUYER";
-    listOfCompanies.add(Company.builder()
-        .name("ACME Company")
-        .alias("ACME Company alias")
-        .addressLineOne("123 Main St.")
-        .addressLineTwo("Bldg 2")
-        .addressCity("Laredo")
-        .addressState("TX")
-        .addressZip("73123")
-        .addressCountry("USA")
-        .roles(roleName)
-        .block(false)
-        .build());
+	@Test
+	public void givenListOfCompanies_whenGetCompaniesByRole_thenReturnCompaniesListFilteredWithRole()
+			throws Exception {
+		List<Company> listOfCompanies = new ArrayList<>();
+		String roleName = "BUYER";
+		listOfCompanies.add(Company.builder()
+				.name("ACME Company")
+				.alias("ACME Company alias")
+				.addressLineOne("123 Main St.")
+				.addressLineTwo("Bldg 2")
+				.addressCity("Laredo")
+				.addressState("TX")
+				.addressZip("73123")
+				.addressCountry("USA")
+				.roles(roleName)
+				.block(false)
+				.build());
 
-    given(companyService.fetchByRole(roleName)).willReturn(listOfCompanies);
-    ResultActions response = mockMvc.perform(get("/api/company/roles/{roleName}", roleName));
+		given(companyService.fetchByRole(roleName)).willReturn(listOfCompanies);
+		ResultActions response = mockMvc.perform(get("/api/company/roles/{roleName}", roleName));
 
-    response.andExpect(status().isOk())
-        .andDo(print())
-        .andExpect(jsonPath("$.size()", is(1)));
-  }
+		response.andExpect(status().isOk())
+				.andDo(print())
+				.andExpect(jsonPath("$.size()", is(1)));
+	}
 
-  @Test
-  public void givenCompanyId_whenGetCompanyById_thenReturnCompanyObject() throws Exception {
-    Long companyId = 1L;
-    Company company = Company.builder()
-        .name("ACME Company")
-        .alias("ACME Company alias")
-        .addressLineOne("123 Main St.")
-        .addressLineTwo("Bldg 2")
-        .addressCity("Laredo")
-        .addressState("TX")
-        .addressZip("73123")
-        .addressCountry("USA")
-        .roles("BUYER")
-        .block(false)
-        .build();
-    given(companyService.fetchById(companyId)).willReturn(Optional.of(company));
+	@Test
+	public void givenCompanyId_whenGetCompanyById_thenReturnCompanyObject() throws Exception {
+		Long companyId = 1L;
+		Company company = Company.builder()
+				.name("ACME Company")
+				.alias("ACME Company alias")
+				.addressLineOne("123 Main St.")
+				.addressLineTwo("Bldg 2")
+				.addressCity("Laredo")
+				.addressState("TX")
+				.addressZip("73123")
+				.addressCountry("USA")
+				.roles("BUYER")
+				.block(false)
+				.build();
+		given(companyService.fetchById(companyId)).willReturn(Optional.of(company));
 
-    ResultActions response = mockMvc.perform(get("/api/company/{id}", companyId));
+		ResultActions response = mockMvc.perform(get("/api/company/{id}", companyId));
 
-    response.andExpect(status().isOk())
-        .andDo(print())
-        .andExpect(jsonPath("$.name", is(company.getName())))
-        .andExpect(jsonPath("$.alias", is(company.getAlias())))
-        .andExpect(jsonPath("$.addressLineOne", is(company.getAddressLineOne())))
-        .andExpect(jsonPath("$.addressLineTwo", is(company.getAddressLineTwo())))
-        .andExpect(jsonPath("$.addressCity", is(company.getAddressCity())))
-        .andExpect(jsonPath("$.addressState", is(company.getAddressState())))
-        .andExpect(jsonPath("$.addressZip", is(company.getAddressZip())))
-        .andExpect(jsonPath("$.addressCountry", is(company.getAddressCountry())))
-        .andExpect(jsonPath("$.roles", is(company.getRoles())))
-        .andExpect(jsonPath("$.block", is(company.getBlock())));
-  }
+		response.andExpect(status().isOk())
+				.andDo(print())
+				.andExpect(jsonPath("$.name", is(company.getName())))
+				.andExpect(jsonPath("$.alias", is(company.getAlias())))
+				.andExpect(jsonPath("$.addressLineOne", is(company.getAddressLineOne())))
+				.andExpect(jsonPath("$.addressLineTwo", is(company.getAddressLineTwo())))
+				.andExpect(jsonPath("$.addressCity", is(company.getAddressCity())))
+				.andExpect(jsonPath("$.addressState", is(company.getAddressState())))
+				.andExpect(jsonPath("$.addressZip", is(company.getAddressZip())))
+				.andExpect(jsonPath("$.addressCountry", is(company.getAddressCountry())))
+				.andExpect(jsonPath("$.roles", is(company.getRoles())))
+				.andExpect(jsonPath("$.block", is(company.getBlock())));
+	}
 
-  @Test
-  public void givenInvalidCompanyId_whenGetCompanyById_thenReturnEmpty() throws Exception {
-    Long companyId = 1L;
-    given(companyService.fetchById(companyId)).willReturn(Optional.empty());
+	@Test
+	public void givenInvalidCompanyId_whenGetCompanyById_thenReturnEmpty() throws Exception {
+		Long companyId = 1L;
+		given(companyService.fetchById(companyId)).willReturn(Optional.empty());
 
-    // when - action or the behaviour that we are going test
-    ResultActions response = mockMvc.perform(get("/api/company/{id}", companyId));
+		// when - action or the behaviour that we are going test
+		ResultActions response = mockMvc.perform(get("/api/company/{id}", companyId));
 
-    // then - verify the output
-    response.andExpect(status().isNotFound())
-        .andDo(print());
-  }
+		// then - verify the output
+		response.andExpect(status().isNotFound())
+				.andDo(print());
+	}
 
-  @Test
-  public void givenInvalidRole_whenGetCompaniesByRole_thenReturnEmpty() throws Exception {
-    List<Company> listOfCompanies = new ArrayList<>();
-    String roleName = "BUYER";
+	@Test
+	public void givenInvalidRole_whenGetCompaniesByRole_thenReturnEmpty() throws Exception {
+		List<Company> listOfCompanies = new ArrayList<>();
+		String roleName = "BUYER";
 
-    given(companyService.fetchByRole(roleName)).willReturn(listOfCompanies);
-    ResultActions response = mockMvc.perform(get("/api/company/roles/{roleName}", roleName));
+		given(companyService.fetchByRole(roleName)).willReturn(listOfCompanies);
+		ResultActions response = mockMvc.perform(get("/api/company/roles/{roleName}", roleName));
 
-    response.andExpect(status().isOk())
-        .andDo(print())
-        .andExpect(jsonPath("$.size()", is(0)));
-  }
+		response.andExpect(status().isOk())
+				.andDo(print())
+				.andExpect(jsonPath("$.size()", is(0)));
+	}
 
-  @Test
-  public void givenUpdatedCompany_whenUpdateCompany_thenReturnUpdatedCompany() throws Exception {
-    Long companyId = 1L;
-    Company savedCompany = Company.builder()
-        .name("ACME Company")
-        .alias("ACME Company alias")
-        .addressLineOne("123 Main St.")
-        .addressLineTwo("Bldg 2")
-        .addressCity("Laredo")
-        .addressState("TX")
-        .addressZip("73123")
-        .addressCountry("USA")
-        .roles("BUYER")
-        .block(false)
-        .build();
-    Company updatedCompany = Company.builder()
-        .name("ACME Company 2")
-        .alias("ACME Company alias 2")
-        .addressLineOne("123 Main St.")
-        .addressLineTwo("Bldg 2")
-        .addressCity("Laredo")
-        .addressState("TX")
-        .addressZip("73123")
-        .addressCountry("USA")
-        .roles("BUYER,SELLER")
-        .block(false)
-        .build();
+	@Test
+	public void givenUpdatedCompany_whenUpdateCompany_thenReturnUpdatedCompany() throws Exception {
+		Long companyId = 1L;
+		Company savedCompany = Company.builder()
+				.name("ACME Company")
+				.alias("ACME Company alias")
+				.addressLineOne("123 Main St.")
+				.addressLineTwo("Bldg 2")
+				.addressCity("Laredo")
+				.addressState("TX")
+				.addressZip("73123")
+				.addressCountry("USA")
+				.roles("BUYER")
+				.block(false)
+				.build();
+		Company updatedCompany = Company.builder()
+				.name("ACME Company 2")
+				.alias("ACME Company alias 2")
+				.addressLineOne("123 Main St.")
+				.addressLineTwo("Bldg 2")
+				.addressCity("Laredo")
+				.addressState("TX")
+				.addressZip("73123")
+				.addressCountry("USA")
+				.roles("BUYER,SELLER")
+				.block(false)
+				.build();
 
-    given(companyService.fetchById(companyId)).willReturn(Optional.of(savedCompany));
-    given(companyService.update(any(Long.class), any(Company.class)))
-        .will((invocation) -> invocation.getArgument(1));
+		given(companyService.fetchById(companyId)).willReturn(Optional.of(savedCompany));
+		given(companyService.update(any(Long.class), any(Company.class)))
+				.will((invocation) -> invocation.getArgument(1));
 
-    ResultActions response = mockMvc.perform(put("/api/company/{id}", companyId).with(csrf())
-        .contentType(MediaType.APPLICATION_JSON)
-        .content(objectMapper.writeValueAsString(updatedCompany)));
+		ResultActions response = mockMvc.perform(put("/api/company/{id}", companyId).with(csrf())
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(updatedCompany)));
 
-    response.andExpect(status().isOk())
-        .andDo(print())
-        .andExpect(jsonPath("$.name", is(updatedCompany.getName())))
-        .andExpect(jsonPath("$.alias", is(updatedCompany.getAlias())))
-        .andExpect(jsonPath("$.addressLineOne", is(updatedCompany.getAddressLineOne())))
-        .andExpect(jsonPath("$.addressLineTwo", is(updatedCompany.getAddressLineTwo())))
-        .andExpect(jsonPath("$.addressCity", is(updatedCompany.getAddressCity())))
-        .andExpect(jsonPath("$.addressState", is(updatedCompany.getAddressState())))
-        .andExpect(jsonPath("$.addressZip", is(updatedCompany.getAddressZip())))
-        .andExpect(jsonPath("$.addressCountry", is(updatedCompany.getAddressCountry())))
-        .andExpect(jsonPath("$.roles", is(updatedCompany.getRoles())))
-        .andExpect(jsonPath("$.block", is(updatedCompany.getBlock())));
-  }
+		response.andExpect(status().isOk())
+				.andDo(print())
+				.andExpect(jsonPath("$.name", is(updatedCompany.getName())))
+				.andExpect(jsonPath("$.alias", is(updatedCompany.getAlias())))
+				.andExpect(jsonPath("$.addressLineOne", is(updatedCompany.getAddressLineOne())))
+				.andExpect(jsonPath("$.addressLineTwo", is(updatedCompany.getAddressLineTwo())))
+				.andExpect(jsonPath("$.addressCity", is(updatedCompany.getAddressCity())))
+				.andExpect(jsonPath("$.addressState", is(updatedCompany.getAddressState())))
+				.andExpect(jsonPath("$.addressZip", is(updatedCompany.getAddressZip())))
+				.andExpect(jsonPath("$.addressCountry", is(updatedCompany.getAddressCountry())))
+				.andExpect(jsonPath("$.roles", is(updatedCompany.getRoles())))
+				.andExpect(jsonPath("$.block", is(updatedCompany.getBlock())));
+	}
 
-  @Test
-  public void givenUpdatedCompany_whenUpdateCompany_thenReturn404() throws Exception {
-    Long companyId = 1L;
-    Company updatedCompany = Company.builder()
-        .name("ACME Company 2")
-        .alias("ACME Company alias 2")
-        .addressLineOne("123 Main St.")
-        .addressLineTwo("Bldg 2")
-        .addressCity("Laredo")
-        .addressState("TX")
-        .addressZip("73123")
-        .addressCountry("USA")
-        .roles("BUYER,SELLER")
-        .block(false)
-        .build();
+	@Test
+	public void givenUpdatedCompany_whenUpdateCompany_thenReturn404() throws Exception {
+		Long companyId = 1L;
+		Company updatedCompany = Company.builder()
+				.name("ACME Company 2")
+				.alias("ACME Company alias 2")
+				.addressLineOne("123 Main St.")
+				.addressLineTwo("Bldg 2")
+				.addressCity("Laredo")
+				.addressState("TX")
+				.addressZip("73123")
+				.addressCountry("USA")
+				.roles("BUYER,SELLER")
+				.block(false)
+				.build();
 
-    given(companyService.fetchById(companyId)).willReturn(Optional.empty());
-    given(companyService.update(any(Long.class), any(Company.class)))
-        .will((invocation) -> invocation.getArgument(1));
+		given(companyService.fetchById(companyId)).willReturn(Optional.empty());
+		given(companyService.update(any(Long.class), any(Company.class)))
+				.will((invocation) -> invocation.getArgument(1));
 
-    ResultActions response = mockMvc.perform(put("/api/company/{id}", companyId).with(csrf())
-        .contentType(MediaType.APPLICATION_JSON)
-        .content(objectMapper.writeValueAsString(updatedCompany)));
+		ResultActions response = mockMvc.perform(put("/api/company/{id}", companyId).with(csrf())
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(updatedCompany)));
 
-    response.andExpect(status().isNotFound())
-        .andDo(print());
-  }
+		response.andExpect(status().isNotFound())
+				.andDo(print());
+	}
 
-  @Test
-  public void givenCompanyId_whenDeletecompany_thenReturnDeletedCode() throws Exception {
-    Long companyId = 1L;
-    Company savedCompany = Company.builder()
-        .name("ACME Company")
-        .alias("ACME Company alias")
-        .addressLineOne("123 Main St.")
-        .addressLineTwo("Bldg 2")
-        .addressCity("Laredo")
-        .addressState("TX")
-        .addressZip("73123")
-        .addressCountry("USA")
-        .roles("BUYER")
-        .block(false)
-        .build();
-    given(companyService.fetchById(companyId)).willReturn(Optional.of(savedCompany));
-    willDoNothing().given(companyService).deleteById(companyId);
+	@Test
+	public void givenCompanyId_whenDeletecompany_thenReturnDeletedCode() throws Exception {
+		Long companyId = 1L;
+		Company savedCompany = Company.builder()
+				.name("ACME Company")
+				.alias("ACME Company alias")
+				.addressLineOne("123 Main St.")
+				.addressLineTwo("Bldg 2")
+				.addressCity("Laredo")
+				.addressState("TX")
+				.addressZip("73123")
+				.addressCountry("USA")
+				.roles("BUYER")
+				.block(false)
+				.build();
+		given(companyService.fetchById(companyId)).willReturn(Optional.of(savedCompany));
+		willDoNothing().given(companyService).deleteById(companyId);
 
-    ResultActions response = mockMvc.perform(delete("/api/company/{id}", companyId));
+		ResultActions response = mockMvc.perform(delete("/api/company/{id}", companyId));
 
-    response.andExpect(status().isOk())
-        .andDo(print())
-        .andExpect(jsonPath("$.deleted", is(Boolean.TRUE)));
-  }
+		response.andExpect(status().isOk())
+				.andDo(print())
+				.andExpect(jsonPath("$.deleted", is(Boolean.TRUE)));
+	}
 
-  @Test
-  public void givenCompanyId_whenDeleteCompany_thenReturn404() throws Exception {
-    Long companyId = 1L;
-    given(companyService.fetchById(companyId)).willReturn(Optional.empty());
-    willDoNothing().given(companyService).deleteById(companyId);
+	@Test
+	public void givenCompanyId_whenDeleteCompany_thenReturn404() throws Exception {
+		Long companyId = 1L;
+		given(companyService.fetchById(companyId)).willReturn(Optional.empty());
+		willDoNothing().given(companyService).deleteById(companyId);
 
-    ResultActions response = mockMvc.perform(delete("/api/company/{id}", companyId));
+		ResultActions response = mockMvc.perform(delete("/api/company/{id}", companyId));
 
-    response.andExpect(status().isNotFound())
-        .andDo(print());
-  }
+		response.andExpect(status().isNotFound())
+				.andDo(print());
+	}
+
+	@Test
+	public void givenCompanyUserComment_whenCreateCompanyUserComment_thenReturnSavedCompanyUserComment()
+			throws Exception {
+		Company company = Company.builder()
+				.name("ACME Company")
+				.alias("ACME Company alias")
+				.addressLineOne("123 Main St.")
+				.addressLineTwo("Bldg 2")
+				.addressCity("Laredo")
+				.addressState("TX")
+				.addressZip("73123")
+				.addressCountry("USA")
+				.roles("BUYER")
+				.block(false)
+				.build();
+		CompanyUserComment comment = CompanyUserComment.builder()
+				.company(company)
+				.comment("test comment")
+				.createdBy("testUser")
+				.build();
+
+		given(commentService.create(any(CompanyUserComment.class)))
+				.willAnswer((invocation) -> invocation.getArgument(0));
+
+		ResultActions response = mockMvc.perform(post("/api/company/{id}/comments/create", 1L).with(csrf())
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(comment)));
+
+		response.andDo(print())
+				.andExpect(status().isCreated())
+				.andExpect(jsonPath("$.comment", is(comment.getComment())))
+				.andExpect(jsonPath("$.createdBy", is(comment.getCreatedBy())));
+	}
+
+	@Test
+	public void giventListOfCompanyUserComments_whenGetCompanyComments_thenReturnCompanyUserCommentsList()
+			throws Exception {
+		List<CompanyUserComment> listOfComments = new ArrayList<>();
+		Company company = Company.builder()
+				.name("ACME Company")
+				.alias("ACME Company alias")
+				.addressLineOne("123 Main St.")
+				.addressLineTwo("Bldg 2")
+				.addressCity("Laredo")
+				.addressState("TX")
+				.addressZip("73123")
+				.addressCountry("USA")
+				.roles("BUYER")
+				.block(false)
+				.build();
+		listOfComments.add(CompanyUserComment.builder()
+				.company(company)
+				.comment("test comment 1")
+				.createdBy("testUser")
+				.build());
+		listOfComments.add(CompanyUserComment.builder()
+				.company(company)
+				.comment("test comment 2")
+				.createdBy("testUser")
+				.build());
+
+		given(commentService.fetchByParentId(1L)).willReturn(listOfComments);
+		ResultActions response = mockMvc.perform(get("/api/company/{id}/comments", 1L));
+
+		response.andExpect(status().isOk())
+				.andDo(print())
+				.andExpect(jsonPath("$.size()", is(listOfComments.size())));
+	}
+
+	@Test
+	public void givenUpdatedCompanyComment_whenUpdateCompanyComment_thenReturnUpdatedCompanyComment() throws Exception {
+		Long commentId = 1L;
+
+		Company company = Company.builder()
+				.name("ACME Company")
+				.alias("ACME Company alias")
+				.addressLineOne("123 Main St.")
+				.addressLineTwo("Bldg 2")
+				.addressCity("Laredo")
+				.addressState("TX")
+				.addressZip("73123")
+				.addressCountry("USA")
+				.roles("BUYER")
+				.block(false)
+				.build();
+		CompanyUserComment savedComment = CompanyUserComment.builder()
+				.company(company)
+				.comment("test comment")
+				.createdBy("testUser")
+				.build();
+		CompanyUserComment updatedComment = CompanyUserComment.builder()
+				.company(company)
+				.comment("test comment 2")
+				.createdBy("testUser")
+				.build();
+
+		given(commentService.fetchById(commentId)).willReturn(Optional.of(savedComment));
+		given(commentService.update(any(Long.class), any(CompanyUserComment.class)))
+				.will((invocation) -> invocation.getArgument(1));
+
+		ResultActions response = mockMvc.perform(put("/api/company/{id}/comments/{commentId}", 1L, commentId).with(csrf())
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(updatedComment)));
+
+		response.andExpect(status().isOk())
+				.andDo(print())
+				.andExpect(jsonPath("$.comment", is(updatedComment.getComment())))
+				.andExpect(jsonPath("$.createdBy", is(updatedComment.getCreatedBy())));
+	}
+
+	@Test
+	public void givenCompanyAttachment_whenCreateCompanyAttachment_thenReturnSavedCompanyAttachment() throws Exception {
+		Company company = Company.builder()
+				.name("ACME Company")
+				.alias("ACME Company alias")
+				.addressLineOne("123 Main St.")
+				.addressLineTwo("Bldg 2")
+				.addressCity("Laredo")
+				.addressState("TX")
+				.addressZip("73123")
+				.addressCountry("USA")
+				.roles("BUYER")
+				.block(false)
+				.build();
+		CompanyAttachment attachment = CompanyAttachment.builder()
+				.base64("base64")
+				.company(company)
+				.eTag("etag")
+				.expirationDate(new Date())
+				.fileName("filename")
+				.fileType("application/json")
+				.issueDate(new Date())
+				.name("attachment name")
+				.observations("observations")
+				.reference("reference")
+				.singleUse(false)
+				.usageReference("sed:123")
+				.build();
+
+		given(attachmentService.create(any(CompanyAttachment.class)))
+				.willAnswer((invocation) -> invocation.getArgument(0));
+
+		ResultActions response = mockMvc.perform(post("/api/company/{id}/attachments/create", 1L).with(csrf())
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(attachment)));
+
+		response.andDo(print())
+				.andExpect(status().isCreated())
+				.andExpect(jsonPath("$.name", is(attachment.getName())))
+				.andExpect(jsonPath("$.base64", is(attachment.getBase64())));
+	}
+
+	@Test
+	public void giventListOfCompanyAttachments_whenGetCompanyAttachments_thenReturnCompanyAttachmentsList()
+			throws Exception {
+		List<CompanyAttachment> listOfAttachments = new ArrayList<>();
+		Company company = Company.builder()
+				.name("ACME Company")
+				.alias("ACME Company alias")
+				.addressLineOne("123 Main St.")
+				.addressLineTwo("Bldg 2")
+				.addressCity("Laredo")
+				.addressState("TX")
+				.addressZip("73123")
+				.addressCountry("USA")
+				.roles("BUYER")
+				.block(false)
+				.build();
+		listOfAttachments.add(CompanyAttachment.builder()
+				.base64("base64")
+				.company(company)
+				.eTag("etag")
+				.expirationDate(new Date())
+				.fileName("filename")
+				.fileType("application/json")
+				.issueDate(new Date())
+				.name("attachment name")
+				.observations("observations")
+				.reference("reference")
+				.singleUse(false)
+				.usageReference("sed:123")
+				.build());
+		listOfAttachments.add(CompanyAttachment.builder()
+				.base64("base64")
+				.company(company)
+				.eTag("etag")
+				.expirationDate(new Date())
+				.fileName("filename")
+				.fileType("application/json")
+				.issueDate(new Date())
+				.name("attachment name")
+				.observations("observations")
+				.reference("reference")
+				.singleUse(false)
+				.usageReference("sed:123")
+				.build());
+
+		given(attachmentService.fetchByParentId(1L)).willReturn(listOfAttachments);
+		ResultActions response = mockMvc.perform(get("/api/company/{id}/attachments", 1L));
+
+		response.andExpect(status().isOk())
+				.andDo(print())
+				.andExpect(jsonPath("$.size()", is(listOfAttachments.size())));
+	}
+
+	// TODO: Test download attachment
 
 }
