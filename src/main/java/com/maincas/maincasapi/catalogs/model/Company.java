@@ -32,6 +32,8 @@ public class Company extends Auditable {
   @NotNull
   @NotBlank
   private String name;
+  private String legalName;
+  private String taxId;
   private String addressLineOne;
   private String addressLineTwo;
   private String addressCity;
