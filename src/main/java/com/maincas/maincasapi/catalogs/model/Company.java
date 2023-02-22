@@ -41,7 +41,5 @@ public class Company extends Auditable {
   @NotNull
   @NotBlank
   private String roles;
-  @NotNull
-  @NotBlank
   private Boolean block;
 }
