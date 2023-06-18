@@ -38,7 +38,7 @@ import com.maincas.maincasapi.catalogs.service.CompanyUserCommentService;
 
 @WebMvcTest(CompanyRestController.class)
 @AutoConfigureMockMvc(addFilters = false)
-public class CompanyRestControllerTest {
+class CompanyRestControllerTest {
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -55,8 +55,8 @@ public class CompanyRestControllerTest {
 	@Autowired
 	private ObjectMapper objectMapper;
 
-	@Test
-	public void givenCompany_whenCreateCompany_thenReturnSavedCompany() throws Exception {
+    @Test
+    void givenCompany_whenCreateCompany_thenReturnSavedCompany() throws Exception {
 		// given - precondition setup
 		Company company = Company.builder()
 				.name("ACME Company")
@@ -95,8 +95,8 @@ public class CompanyRestControllerTest {
 
 	}
 
-	@Test
-	public void giventListOfCompanies_whenGetAllCompanies_thenReturnCompaniesList() throws Exception {
+    @Test
+    void giventListOfCompanies_whenGetAllCompanies_thenReturnCompaniesList() throws Exception {
 		List<Company> listOfCompanies = new ArrayList<>();
 		listOfCompanies.add(Company.builder()
 				.name("ACME Company")
@@ -131,9 +131,9 @@ public class CompanyRestControllerTest {
 				.andExpect(jsonPath("$.size()", is(listOfCompanies.size())));
 	}
 
-	@Test
-	public void givenListOfCompanies_whenGetCompaniesByRole_thenReturnCompaniesListFilteredWithRole()
-			throws Exception {
+    @Test
+    void givenListOfCompanies_whenGetCompaniesByRole_thenReturnCompaniesListFilteredWithRole()
+            throws Exception {
 		List<Company> listOfCompanies = new ArrayList<>();
 		String roleName = "BUYER";
 		listOfCompanies.add(Company.builder()
@@ -157,8 +157,8 @@ public class CompanyRestControllerTest {
 				.andExpect(jsonPath("$.size()", is(1)));
 	}
 
-	@Test
-	public void givenCompanyId_whenGetCompanyById_thenReturnCompanyObject() throws Exception {
+    @Test
+    void givenCompanyId_whenGetCompanyById_thenReturnCompanyObject() throws Exception {
 		Long companyId = 1L;
 		Company company = Company.builder()
 				.name("ACME Company")
@@ -190,8 +190,8 @@ public class CompanyRestControllerTest {
 				.andExpect(jsonPath("$.block", is(company.getBlock())));
 	}
 
-	@Test
-	public void givenInvalidCompanyId_whenGetCompanyById_thenReturnEmpty() throws Exception {
+    @Test
+    void givenInvalidCompanyId_whenGetCompanyById_thenReturnEmpty() throws Exception {
 		Long companyId = 1L;
 		given(companyService.fetchById(companyId)).willReturn(Optional.empty());
 
@@ -203,8 +203,8 @@ public class CompanyRestControllerTest {
 				.andDo(print());
 	}
 
-	@Test
-	public void givenInvalidRole_whenGetCompaniesByRole_thenReturnEmpty() throws Exception {
+    @Test
+    void givenInvalidRole_whenGetCompaniesByRole_thenReturnEmpty() throws Exception {
 		List<Company> listOfCompanies = new ArrayList<>();
 		String roleName = "BUYER";
 
@@ -216,8 +216,8 @@ public class CompanyRestControllerTest {
 				.andExpect(jsonPath("$.size()", is(0)));
 	}
 
-	@Test
-	public void givenUpdatedCompany_whenUpdateCompany_thenReturnUpdatedCompany() throws Exception {
+    @Test
+    void givenUpdatedCompany_whenUpdateCompany_thenReturnUpdatedCompany() throws Exception {
 		Long companyId = 1L;
 		Company savedCompany = Company.builder()
 				.name("ACME Company")
@@ -266,8 +266,8 @@ public class CompanyRestControllerTest {
 				.andExpect(jsonPath("$.block", is(updatedCompany.getBlock())));
 	}
 
-	@Test
-	public void givenUpdatedCompany_whenUpdateCompany_thenReturn404() throws Exception {
+    @Test
+    void givenUpdatedCompany_whenUpdateCompany_thenReturn404() throws Exception {
 		Long companyId = 1L;
 		Company updatedCompany = Company.builder()
 				.name("ACME Company 2")
@@ -294,8 +294,8 @@ public class CompanyRestControllerTest {
 				.andDo(print());
 	}
 
-	@Test
-	public void givenCompanyId_whenDeletecompany_thenReturnDeletedCode() throws Exception {
+    @Test
+    void givenCompanyId_whenDeletecompany_thenReturnDeletedCode() throws Exception {
 		Long companyId = 1L;
 		Company savedCompany = Company.builder()
 				.name("ACME Company")
@@ -319,8 +319,8 @@ public class CompanyRestControllerTest {
 				.andExpect(jsonPath("$.deleted", is(Boolean.TRUE)));
 	}
 
-	@Test
-	public void givenCompanyId_whenDeleteCompany_thenReturn404() throws Exception {
+    @Test
+    void givenCompanyId_whenDeleteCompany_thenReturn404() throws Exception {
 		Long companyId = 1L;
 		given(companyService.fetchById(companyId)).willReturn(Optional.empty());
 		willDoNothing().given(companyService).deleteById(companyId);
@@ -331,9 +331,9 @@ public class CompanyRestControllerTest {
 				.andDo(print());
 	}
 
-	@Test
-	public void givenCompanyUserComment_whenCreateCompanyUserComment_thenReturnSavedCompanyUserComment()
-			throws Exception {
+    @Test
+    void givenCompanyUserComment_whenCreateCompanyUserComment_thenReturnSavedCompanyUserComment()
+            throws Exception {
 		Company company = Company.builder()
 				.name("ACME Company")
 				.alias("ACME Company alias")
@@ -365,9 +365,9 @@ public class CompanyRestControllerTest {
 				.andExpect(jsonPath("$.createdBy", is(comment.getCreatedBy())));
 	}
 
-	@Test
-	public void giventListOfCompanyUserComments_whenGetCompanyComments_thenReturnCompanyUserCommentsList()
-			throws Exception {
+    @Test
+    void giventListOfCompanyUserComments_whenGetCompanyComments_thenReturnCompanyUserCommentsList()
+            throws Exception {
 		List<CompanyUserComment> listOfComments = new ArrayList<>();
 		Company company = Company.builder()
 				.name("ACME Company")
@@ -400,8 +400,8 @@ public class CompanyRestControllerTest {
 				.andExpect(jsonPath("$.size()", is(listOfComments.size())));
 	}
 
-	@Test
-	public void givenUpdatedCompanyComment_whenUpdateCompanyComment_thenReturnUpdatedCompanyComment() throws Exception {
+    @Test
+    void givenUpdatedCompanyComment_whenUpdateCompanyComment_thenReturnUpdatedCompanyComment() throws Exception {
 		Long commentId = 1L;
 
 		Company company = Company.builder()
@@ -441,8 +441,8 @@ public class CompanyRestControllerTest {
 				.andExpect(jsonPath("$.createdBy", is(updatedComment.getCreatedBy())));
 	}
 
-	@Test
-	public void givenCompanyAttachment_whenCreateCompanyAttachment_thenReturnSavedCompanyAttachment() throws Exception {
+    @Test
+    void givenCompanyAttachment_whenCreateCompanyAttachment_thenReturnSavedCompanyAttachment() throws Exception {
 		Company company = Company.builder()
 				.name("ACME Company")
 				.alias("ACME Company alias")
@@ -483,9 +483,9 @@ public class CompanyRestControllerTest {
 				.andExpect(jsonPath("$.base64", is(attachment.getBase64())));
 	}
 
-	@Test
-	public void giventListOfCompanyAttachments_whenGetCompanyAttachments_thenReturnCompanyAttachmentsList()
-			throws Exception {
+    @Test
+    void giventListOfCompanyAttachments_whenGetCompanyAttachments_thenReturnCompanyAttachmentsList()
+            throws Exception {
 		List<CompanyAttachment> listOfAttachments = new ArrayList<>();
 		Company company = Company.builder()
 				.name("ACME Company")

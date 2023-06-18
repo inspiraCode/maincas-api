@@ -14,7 +14,7 @@ public class TariffScheduleServiceImpl extends AbstractMaincasServiceImpl<Tariff
 
   @Override
   public TariffSchedule update(Long id, TariffSchedule tariffSchedule) {
-    String errorMessage = String.format("Unable to find {} by id {}", getType().toString(), id);
+    String errorMessage = "Unable to find {} by id {}".formatted(getType().toString(), id);
     TariffSchedule dbTs = fetchById(id).orElseThrow(() -> new IllegalArgumentException(errorMessage));
 
     if (Objects.nonNull(tariffSchedule.getBaseDescription())

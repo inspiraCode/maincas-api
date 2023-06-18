@@ -17,7 +17,7 @@ public abstract class AbstractItemRestController<T extends Auditable, U extends 
   private static final Logger logger = LoggerFactory.getLogger(AbstractItemRestController.class);
 
   @GetMapping(path = "/list")
-  public List<T> entityList(@PathVariable(name = "parentId") Long parentId) {
+  public List<T> entityList(@PathVariable Long parentId) {
     Type sooper = getClass().getGenericSuperclass();
     Type t = ((ParameterizedType) sooper).getActualTypeArguments()[0];
     logger.info("LIST {} records using PARENT ID {}", t.toString(), parentId);

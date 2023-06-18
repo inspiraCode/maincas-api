@@ -85,8 +85,8 @@ public abstract class AbstractBaseRestController<T extends Auditable, U extends 
 
   @GetMapping("/{id}/revisions")
   @SuppressWarnings("rawtypes")
-  public ResponseEntity<?> getRevisions(@PathVariable(name = "id") String id,
-      @RequestParam(value = "fetchChanges", required = false) boolean fetchChanges) {
+  public ResponseEntity<?> getRevisions(@PathVariable String id,
+          @RequestParam(required = false) boolean fetchChanges) {
     Type sooper = getClass().getGenericSuperclass();
     Type t = ((ParameterizedType) sooper).getActualTypeArguments()[0];
     logger.info("AUDIT LOG {} record with ID {}, fetchChanges? {}", t.toString(), id, fetchChanges);

@@ -30,7 +30,7 @@ public class CompanyRestController
         CompanyAttachment, CompanyAttachmentService> {
 
   @GetMapping("/roles/{roleName}")
-  public List<Company> companiesByRole(@PathVariable(name = "roleName") String roleName) {
+  public List<Company> companiesByRole(@PathVariable String roleName) {
     Type sooper = getClass().getGenericSuperclass();
     Type t = ((ParameterizedType) sooper).getActualTypeArguments()[0];
     log.info("LIST Company records with role {}", t.toString(), roleName);

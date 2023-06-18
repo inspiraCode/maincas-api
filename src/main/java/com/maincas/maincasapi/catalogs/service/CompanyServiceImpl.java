@@ -15,7 +15,7 @@ public class CompanyServiceImpl extends AbstractMaincasServiceImpl<Company, Comp
   @Override
   public Company update(Long id, Company company) {
     Company dbCompany = repo.findById(id)
-        .orElseThrow(() -> new IllegalArgumentException(String.format("Unable to find company by id {}", id)));
+        .orElseThrow(() -> new IllegalArgumentException("Unable to find company by id {}".formatted(id)));
 
     if (Objects.nonNull(company.getAddressCity()) && !"".equalsIgnoreCase(company.getAddressCity())) {
       dbCompany.setAddressCity(company.getAddressCity());

@@ -14,7 +14,7 @@ public class MaterialServiceImpl extends AbstractMaincasServiceImpl<Material, Ma
 
   @Override
   public Material update(Long id, Material material) {
-    String errorMessage = String.format("Unable to find {} by id {}", getType().toString(), id);
+    String errorMessage = "Unable to find {} by id {}".formatted(getType().toString(), id);
     Material dbMaterial = fetchById(id).orElseThrow(() -> new IllegalArgumentException(errorMessage));
     // material.getApprovedImpo()
     if (Objects.nonNull(material.getApprovedImpo()))

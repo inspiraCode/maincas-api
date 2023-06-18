@@ -37,17 +37,17 @@ public abstract class AbstractAttachmentServiceImpl<T extends Attachment, U exte
 
   @Override
   public void deleteById(Long id) {
-    String objectKey = String.format("%s%s_%d", FK_PREFIX, getType().getClass().getTypeName(), id);
+    String objectKey = "%s%s_%d".formatted(FK_PREFIX, getType().getClass().getTypeName(), id);
     s3ds.deleteObject(objectKey);
     super.deleteById(id);
   }
 
   @Override
   public Optional<T> fetchById(Long id) {
-    String errorMessage = String.format("Unable to find {} by id {}", getType().toString(), id);
+    String errorMessage = "Unable to find {} by id {}".formatted(getType().toString(), id);
     T dbEntity = super.fetchById(id).orElseThrow(() -> new IllegalArgumentException(errorMessage));
 
-    String objectKey = String.format("%s%s_%d", FK_PREFIX, getType().getClass().getTypeName(), id);
+    String objectKey = "%s%s_%d".formatted(FK_PREFIX, getType().getClass().getTypeName(), id);
     dbEntity.setBase64(s3Base64(objectKey));
 
     return Optional.of(dbEntity);
